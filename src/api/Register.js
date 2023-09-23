@@ -1,6 +1,6 @@
 import { REST, Routes } from 'discord.js';
 import { config } from 'dotenv';
-import commands from './Commands';
+import commands from './Commands.js';
 
 config();
 
@@ -13,7 +13,7 @@ try {
     
     console.log("UPDATING SLASH COMMANDS...");
 
-    await rest.put(Routes.applicationGuildCommands(client_id), { body: commands });
+    await rest.put(Routes.applicationGuildCommands(client_id, "1075120850241605772"), { body: commands });
 
     console.log("DONE, MY ROOSTER.");
 

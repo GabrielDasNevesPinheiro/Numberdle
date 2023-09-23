@@ -1,15 +1,15 @@
 
 const commands = [
     {
-        name: "setChannel",
+        name: "setchannel",
         description: "Set Numberdle's default channel."
     },
     {
-        name: "gameRules",
+        name: "gamerules",
         description: "Shows Numberdle game rules."
     },
     {
-        name: "nextNumberdle",
+        name: "nextnumber",
         description: "When next random number comes?"
     },
     {
@@ -17,7 +17,7 @@ const commands = [
         description: "Shows ranking."
     },
     {
-        name: "localRank",
+        name: "localrank",
         description: "Shows server's rank."
     }
 ];
