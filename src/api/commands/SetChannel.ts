@@ -1,10 +1,9 @@
 import { BaseInteraction, CacheType, CommandInteraction, Interaction, SlashCommandBuilder, TextChannel } from "discord.js";
-import Command from "./interfaces/Command";
 
 
-export default class SetChannel implements Command {
+export default abstract class SetChannel {
 
-    command: SlashCommandBuilder = new SlashCommandBuilder()
+    static command: SlashCommandBuilder = new SlashCommandBuilder()
         .addChannelOption((option) =>
             option.setName("channel")
                 .setDescription("Set a channel.")
@@ -12,7 +11,7 @@ export default class SetChannel implements Command {
         .setName("setchannel")
         .setDescription("Set Numberdle's default channel.");
 
-    execute(interaction: CommandInteraction<CacheType>): void {
+    static execute(interaction: CommandInteraction<CacheType>): void {
         interaction.reply("Channel set sucessfuly.");
     }
 

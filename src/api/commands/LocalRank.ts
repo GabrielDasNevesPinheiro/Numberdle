@@ -1,13 +1,12 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
-import Command from "./interfaces/Command";
 
-export default class LocalRank implements Command {
+export default abstract class LocalRank {
 
-    command: SlashCommandBuilder = new SlashCommandBuilder()
+    static command: SlashCommandBuilder = new SlashCommandBuilder()
         .setName("localrank")
         .setDescription("Shows server's rank.");
 
-    execute(interaction: CommandInteraction<CacheType>): void {
+    static execute(interaction: CommandInteraction<CacheType>): void {
         interaction.reply("Here's the local rank.");
     }
 
