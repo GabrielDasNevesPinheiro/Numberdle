@@ -9,6 +9,7 @@
     "dotenv": "^16.3.1"
   },
   "scripts": {
-    "rest": "node src/api/Register.js"
+    "rest": "node src/api/Register.js",
+    "start": "node src/core/app.js"
   }
 }
