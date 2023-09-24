@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "type": "module",
   "dependencies": {
+    "@types/node": "^20.6.5",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "rest": "node src/api/Register.js",
-    "start": "node src/core/app.js"
+    "rest": "yarn ts-node src/api/Register.ts",
+    "start": "yarn ts-node src/core/app.ts"
   }
 }

@@ -27,7 +27,7 @@ try {
     
     console.log("UPDATING SLASH COMMANDS...");
 
-    await rest.put(Routes.applicationGuildCommands(client_id, "1075120850241605772"), { body: commands });
+    rest.put(Routes.applicationGuildCommands(client_id, "1075120850241605772"), { body: commands });
 
     console.log("DONE, MY ROOSTER.");
 
