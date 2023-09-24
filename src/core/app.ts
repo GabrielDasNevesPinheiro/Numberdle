@@ -6,7 +6,7 @@ config();
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.on('ready', () => {
-    console.log(`Running... ${client.user.tag}`);
+    console.log(`Running... ${client.user?.tag}`);
 });
 
 client.on('interactionCreate', async (interaction) => {
