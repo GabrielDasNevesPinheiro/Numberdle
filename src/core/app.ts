@@ -1,5 +1,6 @@
 import { Client, GatewayIntentBits } from "discord.js";
 import { config } from "dotenv";
+import executeAction from "../handlers/InteractionHandler";
 
 config();
 
@@ -13,7 +14,7 @@ client.on('interactionCreate', async (interaction) => {
 
     if (!interaction.isChatInputCommand()) return;
 
-    interaction.reply("Alright!");
+    executeAction(interaction.commandName, interaction)
 })
 
 client.login(process.env.TOKEN);
