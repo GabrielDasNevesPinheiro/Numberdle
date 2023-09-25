@@ -1,12 +1,13 @@
-import { CacheType, Interaction } from "discord.js";
+import { CacheType, CommandInteraction, Interaction } from "discord.js";
 import GameRules from "../api/commands/GameRules";
 import LocalRank from "../api/commands/LocalRank";
 import NextNumber from "../api/commands/NextNumber";
 import Rank from "../api/commands/Rank";
 import SetChannel from "../api/commands/SetChannel";
+import Command from "../api/commands/Command";
 
 
-let commands = {
+let commands: { [key: string]: typeof Command } = {
     "gamerules": GameRules,
     "localrank": LocalRank,
     "nextnumber": NextNumber,
@@ -15,5 +16,5 @@ let commands = {
 }
 
 export default function executeAction(cmdName: string, interaction: Interaction<CacheType>) {
-    commands[cmdName].execute(interaction);
+    commands[cmdName].execute(interaction as CommandInteraction);
 }
