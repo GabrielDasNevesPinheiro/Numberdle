@@ -1,6 +1,7 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
+import Command from "./Command";
 
-export default abstract class LocalRank {
+export default abstract class LocalRank extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .setName("localrank")

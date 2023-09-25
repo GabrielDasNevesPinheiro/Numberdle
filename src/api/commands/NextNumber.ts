@@ -1,6 +1,7 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
+import Command from "./Command";
 
-export default abstract class NextNumber {
+export default abstract class NextNumber extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .setName("nextnumber")

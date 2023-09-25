@@ -1,7 +1,8 @@
-import { BaseInteraction, CacheType, CommandInteraction, Interaction, SlashCommandBuilder, TextChannel } from "discord.js";
+import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
+import Command from "./Command";
 
 
-export default abstract class SetChannel {
+export default abstract class SetChannel extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .addChannelOption((option) =>
