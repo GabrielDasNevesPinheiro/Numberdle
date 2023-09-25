@@ -1,7 +1,6 @@
 import { CacheType, ChannelType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
-
-const channelSettings: { [guildId: string]: string } = {}
+import Guild from "../../database/Models/Guild";
 
 export default abstract class SetChannel extends Command {
 
@@ -18,8 +17,25 @@ export default abstract class SetChannel extends Command {
         const channel = interaction.options.get('channel').value;
         await interaction.deferReply({ ephemeral: true });
 
-        if (!(interaction.guild.channels.cache.get(channel as string).type === ChannelType.GuildText)){
+        if (!(interaction.guild.channels.cache.get(channel as string).type === ChannelType.GuildText)) {
             await interaction.editReply({ content: "Canal inválido :(" });
+            return;
+        }
+
+        try {
+
+            const guild = await Guild.findOne({
+                where: { guildId: interaction.guildId }
+            });
+
+            if (!guild) await Guild.create({ defaultChannel: channel as string, guildId: interaction.guildId });
+            if (guild) {
+                guild.defaultChannel = channel as string
+                await guild.save();
+            }
+
+        } catch (error) {
+            await interaction.editReply({ content: "Ocorreu um erro, tente novamente." });
             return;
         }
 
