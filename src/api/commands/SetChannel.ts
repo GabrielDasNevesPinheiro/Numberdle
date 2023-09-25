@@ -29,5 +29,3 @@ export default abstract class SetChannel extends Command {
     }
 
 }
-
-export { SetChannel };
