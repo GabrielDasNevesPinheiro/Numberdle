@@ -5,13 +5,19 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^20.6.5",
+    "@types/validator": "^13.11.1",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.33.0",
+    "sequelize-typescript": "^2.1.5",
+    "sqlite3": "^5.1.6",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
   "scripts": {
     "rest": "yarn ts-node src/api/Register.ts",
+    "db": "yarn ts-node src/database/Testing.ts",
     "start": "yarn ts-node src/core/app.ts"
   }
 }
