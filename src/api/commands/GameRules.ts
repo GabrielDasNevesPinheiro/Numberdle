@@ -7,8 +7,11 @@ export default abstract class GameRules extends Command {
         .setName("gamerules")
         .setDescription("Shows Numberdle game rules.");
 
-    static execute(interaction: CommandInteraction<CacheType>) {
-        interaction.reply("Regra n°1 do Clube de regatas do flamengo: Você não comenta do Clube de Regatas do Flamengo.");
+    static async execute(interaction: CommandInteraction<CacheType>) {
+        await interaction.reply({ 
+            ephemeral: true,
+            content: "Diariamente eu irei gerar um número aleatório e cabe a você advinhar que número é esse, você terá apenas 10 chances. Você ganhará mais pontos se acertar com poucas tentativas... Boa sorte! :nerd:"
+        });
     }
 
 }
