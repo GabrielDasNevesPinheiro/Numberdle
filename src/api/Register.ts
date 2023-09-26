@@ -5,6 +5,7 @@ import GameRules from './commands/GameRules';
 import LocalRank from './commands/LocalRank';
 import Rank from './commands/Rank';
 import NextNumber from './commands/NextNumber';
+import Play from './commands/Play';
 
 
 config();
@@ -19,7 +20,8 @@ const commands = [
     GameRules.command.toJSON(),
     LocalRank.command.toJSON(),
     Rank.command.toJSON(),
-    NextNumber.command.toJSON()
+    NextNumber.command.toJSON(),
+    Play.command.toJSON(),
 ];
 
 
