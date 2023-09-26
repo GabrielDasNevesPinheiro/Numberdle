@@ -1,6 +1,6 @@
 // this file contains utility functions
 
-function getTodayDate() {
+export function getTodayDate() {
     const today = new Date();
     const year = today.getFullYear();
     let month = today.getMonth();
