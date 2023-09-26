@@ -7,12 +7,14 @@ import Play from "../api/commands/Play";
 
 config();
 
-const client = new Client({ intents: [
-    GatewayIntentBits.Guilds, 
-    GatewayIntentBits.GuildMessageReactions,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-]});
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent
+    ]
+});
 
 client.on('ready', async () => {
     console.log(`Running... ${client.user?.tag}`);
@@ -26,7 +28,7 @@ client.on('guildCreate', async (guild) => {
         guildId: guild.id,
         defaultChannel: null
     });
-    
+
     client.users.send(guild.ownerId, "Obrigado por me adicionar em seu servidor, para me configurar basta definir um canal padrão para mim utilizando /setchannel em seu servidor! :)");
 
 });
@@ -41,22 +43,50 @@ client.on('interactionCreate', async (interaction) => {
 
 client.on('messageCreate', async (message) => {
 
-    if(message.author.id === client.user.id) return;
+    if (message.author.id === client.user.id) return;
 
-    const { defaultChannel } = await Guild.findOne({ where: { guildId: message.guildId }});
+    const { defaultChannel } = await Guild.findOne({ where: { guildId: message.guildId } });
 
-    if(message.channelId !== defaultChannel) return; // dont answer if is not Numberdle's channel
-    
-    if(!Play.inGame[message.author.id]) { // if true, player is not playing Numberdle yet to guess his number
+    if (message.channelId !== defaultChannel) return; // dont answer if is not Numberdle's channel
+
+    if (!Play.inGame[message.author.id]) { // if true, player is not playing Numberdle yet to guess his number
         message.react('🤡');
         return;
     };
 
-    if(Number.isNaN(Number(message.content))) { // check if is not a numeric string
+    if (Number.isNaN(Number(message.content))) { // check if is not a numeric string
         message.react('💀');
         return;
     }
 
+
+    const guess = Number(message.content);
+
+    if (guess == Play.inGame[message.author.id].generatedNumber) {
+        message.reply(`Wow, Você acertou o número, era mesmo ${guess}!`);
+        delete Play.inGame[message.author.id];
+        return;
+    }
+
+    if (guess < Play.inGame[message.author.id].generatedNumber) {
+        message.react('➕');
+        Play.inGame[message.author.id].attempts -= 1;
+    }
+
+    if (guess > Play.inGame[message.author.id].generatedNumber) {
+        message.react('➖');
+        Play.inGame[message.author.id].attempts -= 1;
+    }
+
+    if (Play.inGame[message.author.id].attempts == 3) {
+        message.reply("Você tem só mais 3 tentativas!");
+    }
+
+    if (Play.inGame[message.author.id].attempts == 0) {
+        message.reply("Você já usou suas 10 tentativas :( \n Boa sorte no próximo dia :)");
+        delete Play.inGame[message.author.id];
+        return;
+    }
 });
 
 client.login(process.env.TOKEN);
