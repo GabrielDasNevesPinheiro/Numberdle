@@ -37,7 +37,6 @@ export default abstract class Play extends Command {
         Play.inGame[player.userId] = { attempts: 10, generatedNumber: number }
 
         await interaction.editReply({ content: "Advinhe o seu número entre 0 e 1000 em até 10 chances!"});
-        console.log(Play.inGame);
 
     }
 }
