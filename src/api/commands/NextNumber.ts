@@ -1,5 +1,7 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
+import Player from "../../database/Models/Player";
+import { getTodayDate } from "../../core/utils/Utils";
 
 export default abstract class NextNumber extends Command {
 
@@ -7,8 +9,22 @@ export default abstract class NextNumber extends Command {
         .setName("nextnumber")
         .setDescription("When next random number comes?");
 
-    static execute(interaction: CommandInteraction<CacheType>): void {
-        interaction.reply("Next number comes tomorrow.");
+    static async execute(interaction: CommandInteraction<CacheType>) {
+
+        await interaction.deferReply({ ephemeral: true });
+
+        const user = await Player.findOne({
+            where: {
+                userId: interaction.user.id,
+            }
+        });
+
+        if((user?.lastPlayed < getTodayDate()) || !user?.lastPlayed) {
+            await interaction.editReply({ content: "Seu Numberdle de hoje está disponível"});
+        } else {
+            await interaction.editReply({ content: "Volte amanhã, você já jogou :p"});
+        }
+
     }
 
 }
