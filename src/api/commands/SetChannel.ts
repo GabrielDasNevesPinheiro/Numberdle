@@ -17,6 +17,10 @@ export default abstract class SetChannel extends Command {
         const channel = interaction.options.get('channel').value;
         await interaction.deferReply({ ephemeral: true });
 
+        if(!interaction.memberPermissions.has("Administrator")) {
+            await interaction.editReply({ content: "Você parece não ter permissão para isso."});
+        } 
+
         if (!(interaction.guild.channels.cache.get(channel as string).type === ChannelType.GuildText)) {
             await interaction.editReply({ content: "Canal inválido :(" });
             return;
