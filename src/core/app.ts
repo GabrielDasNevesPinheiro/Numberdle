@@ -4,6 +4,8 @@ import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
 import Guild from "../database/Models/Guild";
 import Play from "../api/commands/Play";
+import Player from "../database/Models/Player";
+import { getTodayDate } from "./utils/Utils";
 
 config();
 
@@ -63,7 +65,17 @@ client.on('messageCreate', async (message) => {
     const guess = Number(message.content);
 
     if (guess == Play.inGame[message.author.id].generatedNumber) {
-        message.reply(`Wow, Você acertou o número, era mesmo ${guess}!`);
+        
+        const player = await Player.findOne({ where: { userId: message.author.id } });
+        
+        const scoreEarned = 100 * Play.inGame[message.author.id].attempts;
+        player.score += scoreEarned;
+        player.lastPlayed = getTodayDate();
+        
+        message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos`);
+        
+        await player.save();
+
         delete Play.inGame[message.author.id];
         return;
     }
@@ -84,6 +96,13 @@ client.on('messageCreate', async (message) => {
 
     if (Play.inGame[message.author.id].attempts == 0) {
         message.reply("Você já usou suas 10 tentativas :( \n Boa sorte no próximo dia :)");
+
+        const player = await Player.findOne({ where: { userId: message.author.id } });
+
+        player.lastPlayed = getTodayDate();
+
+        await player.save();
+
         delete Play.inGame[message.author.id];
         return;
     }
