@@ -1,6 +1,5 @@
 import { CacheType, CommandInteraction, Interaction } from "discord.js";
 import GameRules from "../api/commands/GameRules";
-import LocalRank from "../api/commands/LocalRank";
 import NextNumber from "../api/commands/NextNumber";
 import Rank from "../api/commands/Rank";
 import SetChannel from "../api/commands/SetChannel";
@@ -10,7 +9,6 @@ import Play from "../api/commands/Play";
 
 let commands: { [key: string]: typeof Command } = {
     "gamerules": GameRules,
-    "localrank": LocalRank,
     "nextnumber": NextNumber,
     "rank": Rank,
     "setchannel": SetChannel,
