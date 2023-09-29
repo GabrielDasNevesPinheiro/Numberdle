@@ -25,6 +25,11 @@ export default abstract class Play extends Command {
         let player = await Player.findOne({ where: { userId: interaction.user.id }});
         
         if (interaction.channelId !== defaultChannel) return;
+
+        if(Play.inGame[player.userId]) {
+            await interaction.editReply({ content: "Você já está em jogo :p"});
+            return;
+        }
         
         if (!player) {
             player = await Player.create({ userId: interaction.user.id, score: 0, username: interaction.user.username });
