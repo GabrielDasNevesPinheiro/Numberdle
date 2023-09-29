@@ -26,7 +26,16 @@ export default abstract class Play extends Command {
         
         if (interaction.channelId !== defaultChannel) return;
         
-        if (!player) player = await Player.create({ userId: interaction.user.id, score: 0, username: interaction.user.username });
+        if (!player) {
+            player = await Player.create({ userId: interaction.user.id, score: 0, username: interaction.user.username });
+            const guild = await Guild.findOne({ where: {
+                guildId: interaction.guildId
+            }});
+
+            guild.players = [...guild.players, player.userId];
+
+            await guild.save();
+        }
         
         if (!(player.lastPlayed < getTodayDate()) && player.lastPlayed) return await interaction.editReply({ content: "Você já jogou hoje." });
 
