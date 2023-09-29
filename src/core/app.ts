@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits } from "discord.js";
+import { ChannelType, Client, GatewayIntentBits } from "discord.js";
 import { config } from "dotenv";
 import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
@@ -26,9 +26,11 @@ client.on('ready', async () => {
 
 client.on('guildCreate', async (guild) => {
 
+    const mainTextChannel = (await guild.channels.fetch()).filter((channel) => channel.type == ChannelType.GuildText).first();
+
     await Guild.create({
         guildId: guild.id,
-        defaultChannel: null
+        defaultChannel: mainTextChannel.id
     });
 
     client.users.send(guild.ownerId, "Obrigado por me adicionar em seu servidor, para me configurar basta definir um canal padrão para mim utilizando /setchannel em seu servidor! :)");
