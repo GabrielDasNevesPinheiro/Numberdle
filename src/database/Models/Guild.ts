@@ -5,6 +5,7 @@ class Guild extends Model<InferAttributes<Guild>, InferCreationAttributes<Guild>
 
     declare guildId: string;
     declare defaultChannel: CreationOptional<string>;
+    declare players: CreationOptional<Array<string>>;
 
 }
 
@@ -15,6 +16,11 @@ Guild.init({
     },
     defaultChannel: {
         type: new DataTypes.STRING(24),
+    },
+    players: {
+        type: DataTypes.JSON(),
+        defaultValue: [],
+        
     }
 }, {
     sequelize,
