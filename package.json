@@ -19,8 +19,8 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "rest": "yarn ts-node src/api/Register.ts",
-    "db": "yarn ts-node src/database/Testing.ts",
-    "start": "yarn ts-node src/core/app.ts"
+    "rest": "npx ts-node src/api/Register.ts",
+    "db": "npx ts-node src/database/Testing.ts",
+    "start": "npx ts-node src/core/app.ts"
   }
 }
