@@ -5,6 +5,7 @@ import Rank from "../api/commands/Rank";
 import SetChannel from "../api/commands/SetChannel";
 import Command from "../api/commands/Command";
 import Play from "../api/commands/Play";
+import PlayerScore from "../api/commands/PlayerScore";
 
 
 let commands: { [key: string]: typeof Command } = {
@@ -13,6 +14,7 @@ let commands: { [key: string]: typeof Command } = {
     "rank": Rank,
     "setchannel": SetChannel,
     "play": Play,
+    "player": PlayerScore
 }
 
 export default function executeAction(cmdName: string, interaction: Interaction<CacheType>) {
