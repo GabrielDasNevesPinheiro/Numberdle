@@ -3,8 +3,6 @@ import { config } from "dotenv";
 import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
 import Guild from "../database/Models/Guild";
-import Play from "../api/commands/Play";
-import Player from "../database/Models/Player";
 import { applyGameLogic, isValidMessage } from "./utils/Utils";
 
 config();
