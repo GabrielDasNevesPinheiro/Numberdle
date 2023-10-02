@@ -39,11 +39,11 @@ export default abstract class Rank extends Command {
             }));
         }
 
-        let emojis = [':first_place:', ':second_place:', ':third_place:'];
+        let emojis = [':first_place:', ':second_place:', ':third_place:', '4', '5', '6', '7', '8', '9', '10'];
         players.map((player) => {
 
             const index = players.indexOf(player);
-            let emoji = emojis[index] || index;
+            let emoji = emojis[index];
 
             embed.addFields([
                 { name: `${emoji} - ${player.username}`, value: `${player.score} Pontos` }
