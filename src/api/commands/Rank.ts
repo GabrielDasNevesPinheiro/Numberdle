@@ -43,7 +43,7 @@ export default abstract class Rank extends Command {
         players.map((player) => {
 
             const index = players.indexOf(player);
-            let emoji = emojis[index];
+            let emoji = emojis[index] || index;
 
             embed.addFields([
                 { name: `${emoji} - ${player.username}`, value: `${player.score} Pontos` }
