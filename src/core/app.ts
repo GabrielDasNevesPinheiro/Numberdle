@@ -97,7 +97,7 @@ client.on('messageCreate', async (message) => {
     }
 
     if (Play.inGame[message.author.id].attempts == 0) {
-        message.reply("Você já usou suas 10 tentativas :( \n Boa sorte no próximo dia :)");
+        message.reply(`Você já usou suas 10 tentativas e o número era ${Play.inGame[message.author.id].generatedNumber}  :( \n Boa sorte no próximo dia :)`);
 
         const player = await Player.findOne({ where: { userId: message.author.id } });
 
