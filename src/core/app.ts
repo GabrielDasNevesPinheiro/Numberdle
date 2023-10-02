@@ -5,7 +5,7 @@ import sequelize from "../database/Connection";
 import Guild from "../database/Models/Guild";
 import Play from "../api/commands/Play";
 import Player from "../database/Models/Player";
-import { applyGameLogic, getTodayDate, isValidMessage } from "./utils/Utils";
+import { applyGameLogic, isValidMessage } from "./utils/Utils";
 
 config();
 
