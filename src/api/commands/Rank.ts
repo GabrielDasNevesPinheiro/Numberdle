@@ -30,7 +30,7 @@ export default abstract class Rank extends Command {
         }
         
         if (target === "local") {
-            const guildPlayers = (await Guild.findOne({ where: { guildId: interaction.guildId } })).players;
+            const guildPlayers = (await Guild.findOne({ where: { guildId: interaction.guildId } })).players.slice(0, 10);
             await Promise.all(guildPlayers.map(async (userId) => {
                 
                 const guildPlayer = await Player.findOne({ where: { userId } });
