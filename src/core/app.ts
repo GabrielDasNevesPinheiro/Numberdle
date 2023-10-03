@@ -45,7 +45,7 @@ client.on('interactionCreate', async (interaction) => {
 
 client.on('messageCreate', async (message) => {
 
-    if (!isValidMessage(message, client.user.id)) return;
+    if (!(await isValidMessage(message, client.user.id))) return;
 
     const guess = Number(message.content);
     applyGameLogic(message, guess);
