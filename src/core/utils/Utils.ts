@@ -18,7 +18,8 @@ export function getTodayDate() {
 }
 
 
-export async function isValidMessage(message: Message<boolean>, clientId: string) {
+export async function isValidMessage(message: Message<boolean>, clientId: string): Promise<boolean> {
+
     if (message.author.id === clientId) return false;
 
     const { defaultChannel } = await Guild.findOne({ where: { guildId: message.guildId } });
