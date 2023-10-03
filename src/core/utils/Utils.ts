@@ -67,7 +67,14 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     }
 
     if (Play.inGame[message.author.id].attempts == 3) {
-        message.reply("Você tem só mais 3 tentativas!");
+        
+        let len = Play.inGame[message.author.id].generatedNumber.toString().length - 1
+        let toSub = Number(Play.inGame[message.author.id].generatedNumber.toString()[len])
+
+        const minRange = (Play.inGame[message.author.id].generatedNumber - 10) - toSub
+        const maxRange = (Play.inGame[message.author.id].generatedNumber + 10) - toSub
+
+        message.reply(`Você tem só mais 3 tentativas! Seu número está entre ${minRange} e ${maxRange}`);
     }
 
     if (Play.inGame[message.author.id].attempts == 0) {
