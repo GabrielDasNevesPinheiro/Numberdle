@@ -27,7 +27,6 @@ export async function isValidMessage(message: Message<boolean>, clientId: string
     if (message.channelId !== defaultChannel) return false; // dont answer if is not Numberdle's channel
 
     if (!Play.inGame[message.author.id]) { // if true, player is not playing Numberdle yet to guess his number
-        message.react('🤡');
         return false;
     };
 
