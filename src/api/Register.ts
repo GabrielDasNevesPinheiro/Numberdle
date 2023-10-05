@@ -7,6 +7,7 @@ import NextNumber from './commands/NextNumber';
 import Play from './commands/Play';
 import PlayerScore from './commands/PlayerScore';
 import SetName from './commands/SetName';
+import Announce from './commands/Announce';
 
 
 config();
@@ -27,16 +28,19 @@ const commands = [
 ];
 
 
-try {
+export default function postSlashCommands() {
     
-    console.log("UPDATING SLASH COMMANDS...");
-
-    rest.put(Routes.applicationCommands(client_id), { body: commands });
-
-    console.log("DONE, MY ROOSTER.");
-
-} catch (error) {
-
-    console.log(`Error while registering slash commands: ${error}`);
-
+    try {
+        
+        console.log("UPDATING SLASH COMMANDS...");
+    
+        rest.put(Routes.applicationCommands(client_id), { body: commands });
+    
+        console.log("DONE, MY ROOSTER.");
+    
+    } catch (error) {
+    
+        console.log(`Error while registering slash commands: ${error}`);
+    
+    }
 }
