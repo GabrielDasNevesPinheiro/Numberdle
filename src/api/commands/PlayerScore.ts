@@ -24,7 +24,7 @@ export default abstract class PlayerScore extends Command {
             return;
         }
 
-        await interaction.editReply({ content: `${player.username} tem ${player.score} pontos.`});
+        await interaction.editReply({ content: `${player.username} tem ${player.score} pontos e está ganhando x${player.multiplier} mais pontos.`});
         
 
     }
