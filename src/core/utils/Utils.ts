@@ -44,12 +44,15 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         const player = await Player.findOne({ where: { userId: message.author.id } });
 
-        const scoreEarned = 100 * Play.inGame[message.author.id].attempts;
+        const scoreEarned = Math.floor((100 * Play.inGame[message.author.id].attempts) * player.multiplier);
         player.score += scoreEarned;
         player.lastPlayed = getTodayDate();
 
+        
         message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos`);
-
+        
+        player.multiplier += 0.1;
+        player.multiplier = Number(player.multiplier.toFixed(1));
         await player.save();
 
         delete Play.inGame[message.author.id];
@@ -82,8 +85,8 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         const player = await Player.findOne({ where: { userId: message.author.id } });
 
+        player.multiplier = 1.0;
         player.lastPlayed = getTodayDate();
-
         await player.save();
 
         delete Play.inGame[message.author.id];
