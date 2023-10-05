@@ -7,6 +7,7 @@ class Player extends Model<InferAttributes<Player>, InferCreationAttributes<Play
     declare username: string;
     declare score: CreationOptional<number>;
     declare lastPlayed: CreationOptional<Date>;
+    declare multiplier: number
 }
 
 Player.init({
@@ -24,6 +25,10 @@ Player.init({
     score: {
         type: DataTypes.NUMBER,
         defaultValue: 0,
+    },
+    multiplier: {
+        type: DataTypes.FLOAT,
+        defaultValue: 1.0
     }
 }, {
     sequelize,
