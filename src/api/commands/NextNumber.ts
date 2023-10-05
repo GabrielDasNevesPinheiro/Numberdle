@@ -22,7 +22,7 @@ export default abstract class NextNumber extends Command {
         if((user?.lastPlayed < getTodayDate()) || !user?.lastPlayed) {
             await interaction.editReply({ content: "Seu Numberdle de hoje está disponível"});
         } else {
-            await interaction.editReply({ content: "Volte amanhã, você já jogou :p"});
+            await interaction.editReply({ content: "Você poderá jogar só amanhã"});
         }
 
     }
