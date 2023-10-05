@@ -4,6 +4,7 @@ import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
 import Guild from "../database/Models/Guild";
 import { applyGameLogic, isValidMessage } from "./utils/Utils";
+import postSlashCommands from "../api/Register";
 
 config();
 
@@ -52,4 +53,6 @@ client.on('messageCreate', async (message) => {
 
 });
 
+
+postSlashCommands();
 client.login(process.env.TOKEN);
