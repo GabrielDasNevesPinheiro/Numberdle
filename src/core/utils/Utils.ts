@@ -49,7 +49,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         player.lastPlayed = getTodayDate();
 
         
-        message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos`);
+        message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier}de bônus)`);
         
         player.multiplier += 0.1;
         player.multiplier = Number(player.multiplier.toFixed(1));
@@ -81,11 +81,13 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     }
 
     if (Play.inGame[message.author.id].attempts == 0) {
-        message.reply(`Você já usou suas 10 tentativas e o número era ${Play.inGame[message.author.id].generatedNumber}  :( \n Boa sorte no próximo dia :)`);
-
+        
         const player = await Player.findOne({ where: { userId: message.author.id } });
-
+        
         player.multiplier = 1.0;
+        
+        message.reply(`Você já usou suas 10 tentativas e o número era ${Play.inGame[message.author.id].generatedNumber}  :( \n Boa sorte no próximo dia :)\nSeu bônus de x${player.multiplier} foi resetado.`);
+        
         player.lastPlayed = getTodayDate();
         await player.save();
 
