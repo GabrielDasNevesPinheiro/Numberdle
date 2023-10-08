@@ -19,12 +19,16 @@ export default abstract class SetName extends Command {
         await interaction.deferReply({ ephemeral: true });
 
         let player = await Player.findOne({ where: { userId: interaction.user.id } });
-        const newNick = interaction.options.get("nick").value as string;
 
-        player.username = newNick;
-        await player.save();
+        if(player) {
 
-        await interaction.editReply({ content: `Você mudou seu nick para ${newNick} :)` });
+            const newNick = interaction.options.get("nick").value as string;
+    
+            player.username = newNick;
+            await player.save();
+    
+            await interaction.editReply({ content: `Você mudou seu nick para ${newNick} :)` });
+        }
 
     }
 
