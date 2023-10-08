@@ -40,9 +40,11 @@ export default abstract class Rank extends Command {
         }
 
         let emojis = [':first_place:', ':second_place:', ':third_place:', '4', '5', '6', '7', '8', '9', '10'];
+        let place = 0;
         players.map((player) => {
 
             const index = players.indexOf(player);
+            place = index;
             let emoji = emojis[index];
 
             embed.addFields([
@@ -50,7 +52,7 @@ export default abstract class Rank extends Command {
             ]);
         });
 
-        await interaction.reply({ embeds: [embed], content: "Veja a seguir o ranking", ephemeral: false });
+        await interaction.reply({ embeds: [embed], content: `Você está em ${place}° lugar no ranking <@${interaction.user.id}>`, ephemeral: false });
     }
 
 }
