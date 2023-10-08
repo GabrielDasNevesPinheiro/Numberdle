@@ -22,18 +22,21 @@ export default abstract class Play extends Command {
         await interaction.deferReply({});
 
         const { defaultChannel } = await Guild.findOne({ where: { guildId: interaction.guildId }});
+        
         let player = await Player.findOne({ where: { userId: interaction.user.id }});
+        
+        const guild = await Guild.findOne({ where: {
+            guildId: interaction.guildId
+        }});
         
         if (interaction.channelId !== defaultChannel) return;
         
         if (!player) {
             player = await Player.create({ userId: interaction.user.id, score: 0, username: interaction.user.username });
-            const guild = await Guild.findOne({ where: {
-                guildId: interaction.guildId
-            }});
+        }
 
+        if(!guild.players.includes(player.userId)) {
             guild.players = [...guild.players, player.userId];
-
             await guild.save();
         }
 
