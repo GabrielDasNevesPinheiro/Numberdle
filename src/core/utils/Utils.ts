@@ -49,7 +49,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         player.lastPlayed = getTodayDate();
 
         
-        message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier}de bônus)`);
+        message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier} de bônus)`);
         
         player.multiplier += 0.1;
         player.multiplier = Number(player.multiplier.toFixed(1));
