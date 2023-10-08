@@ -44,7 +44,9 @@ export default abstract class Rank extends Command {
         players.map((player) => {
 
             const index = players.indexOf(player);
-            place = index;
+            
+            if(player.userId === interaction.user.id) place = index + 1;
+
             let emoji = emojis[index];
 
             embed.addFields([
