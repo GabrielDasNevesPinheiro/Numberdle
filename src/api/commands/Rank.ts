@@ -50,7 +50,7 @@ export default abstract class Rank extends Command {
             ]);
         });
 
-        await interaction.reply({ embeds: [embed], content: "Veja a seguir o ranking", ephemeral: true });
+        await interaction.reply({ embeds: [embed], content: "Veja a seguir o ranking", ephemeral: false });
     }
 
 }
