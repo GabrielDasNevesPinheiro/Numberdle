@@ -12,7 +12,7 @@ export default abstract class SetName extends Command {
                 .setDescription("Seu novo nickname")
                 .setRequired(true)
         ).setName("setname")
-        .setDescription("Mude seu nickname no ranking.");
+        .setDescription("Use 100 dos seus pontos para trocar seu nickname no ranking");
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
@@ -20,14 +20,22 @@ export default abstract class SetName extends Command {
 
         let player = await Player.findOne({ where: { userId: interaction.user.id } });
 
-        if(player) {
+        if (player) {
 
             const newNick = interaction.options.get("nick").value as string;
-    
+
+            if (player.score < 100 ) {
+                await interaction.editReply({ content: "Você não tem pontos o suficiente para isso" });
+                return;
+            }
+
             player.username = newNick;
+            player.score -= 100;
             await player.save();
-    
-            await interaction.editReply({ content: `Você mudou seu nick para ${newNick} :)` });
+
+            await interaction.editReply({ content: `Você usou 100 pontos e mudou seu nickname para ${newNick} :)` });
+        } else {
+            await interaction.editReply({ content: "Cara tu nem tá no rank ainda, nem da pra mudar teu nick" });
         }
 
     }
