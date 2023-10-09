@@ -26,14 +26,17 @@ client.on('ready', async () => {
     const dbl = createDjsClient(process.env.DBL, client);
     dbl.startPosting();
     dbl.postBotCommands(CommandsArray);
+    dbl.startPolling();
     dbl.on("vote", async (vote, client) => {
         
         const player = await Player.findOne({ where: { userId: vote.id }});
-        
+
         if(player) {
             player.score += 150;
             await player.save();
         }
+
+        console.log(`VOTE EVENT[${vote.username}]`);
     });
 
     console.log(`Running... ${client.user?.tag}`);
