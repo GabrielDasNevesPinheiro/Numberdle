@@ -7,10 +7,10 @@ export default abstract class SetChannel extends Command {
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .addChannelOption((option) =>
             option.setName("channel")
-                .setDescription("Set a channel.")
+                .setDescription("Escolha um canal de texto")
                 .setRequired(true))
         .setName("setchannel")
-        .setDescription("Set Numberdle's default channel.");
+        .setDescription("Configura o canal do Numberdle");
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 

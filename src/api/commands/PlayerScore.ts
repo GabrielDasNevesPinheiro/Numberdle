@@ -7,9 +7,9 @@ export default abstract class PlayerScore extends Command {
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .addUserOption(option =>
             option.setName("user")
-                .setDescription("User to look, if null displays your user score"))
+                .setDescription("Mostra as informações de algum jogador"))
         .setName("player")
-        .setDescription("Displays a player score");
+        .setDescription("Escolha um jogador");
 
 
     static async execute(interaction: CommandInteraction<CacheType>) {

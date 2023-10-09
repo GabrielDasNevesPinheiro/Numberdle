@@ -15,7 +15,7 @@ export default abstract class Rank extends Command {
                 ).setRequired(true)
         )
         .setName("rank")
-        .setDescription("Shows global rank.");
+        .setDescription("Mostra o ranking do Numberdle");
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 

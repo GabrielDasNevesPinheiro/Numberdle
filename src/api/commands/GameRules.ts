@@ -5,7 +5,7 @@ export default abstract class GameRules extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .setName("gamerules")
-        .setDescription("Shows Numberdle game rules.");
+        .setDescription("Mostra como o jogo funciona");
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 

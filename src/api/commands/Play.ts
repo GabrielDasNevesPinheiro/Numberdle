@@ -15,7 +15,7 @@ export default abstract class Play extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .setName("play")
-        .setDescription("Time to play today's Numberdle!")
+        .setDescription("Inicia um Numberdle")
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 

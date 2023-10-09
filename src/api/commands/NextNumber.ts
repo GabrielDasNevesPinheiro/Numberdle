@@ -7,7 +7,7 @@ export default abstract class NextNumber extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .setName("nextnumber")
-        .setDescription("When next random number comes?");
+        .setDescription("Mostra se o jogo já está disponível");
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
