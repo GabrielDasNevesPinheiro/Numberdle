@@ -5,7 +5,7 @@ import sequelize from "../database/Connection";
 import Guild from "../database/Models/Guild";
 import { applyGameLogic, isValidMessage } from "./utils/Utils";
 import postSlashCommands from "../api/Register";
-import { createErisClient } from "discordbotlist";
+import { createDjsClient, createErisClient } from "discordbotlist";
 
 config();
 
@@ -20,7 +20,7 @@ const client = new Client({
 
 client.on('ready', async () => {
     console.log(`Running... ${client.user?.tag}`);
-    const dbl = createErisClient(process.env.DBL, client);
+    const dbl = createDjsClient(process.env.DBL, client);
     await sequelize.authenticate();
     await sequelize.sync();
 });
