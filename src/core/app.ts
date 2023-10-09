@@ -6,6 +6,7 @@ import Guild from "../database/Models/Guild";
 import { applyGameLogic, isValidMessage } from "./utils/Utils";
 import postSlashCommands, { CommandsArray } from "../api/Register";
 import { createDjsClient } from "discordbotlist";
+import Player from "../database/Models/Player";
 
 config();
 
@@ -19,14 +20,24 @@ const client = new Client({
 });
 
 client.on('ready', async () => {
-    console.log(`Running... ${client.user?.tag}`);
-    const dbl = createDjsClient(process.env.DBL, client);
-    dbl.startPosting();
-    dbl.postBotCommands(
-        CommandsArray
-    );
     await sequelize.authenticate();
     await sequelize.sync();
+    
+    const dbl = createDjsClient(process.env.DBL, client);
+    dbl.startPosting();
+    dbl.postBotCommands(CommandsArray);
+    dbl.on("vote", async (vote, client) => {
+        
+        const player = await Player.findOne({ where: { userId: vote.id }});
+        
+        if(player) {
+            player.score += 150;
+            await player.save();
+        }
+    });
+
+    console.log(`Running... ${client.user?.tag}`);
+
 });
 
 client.on('guildCreate', async (guild) => {
