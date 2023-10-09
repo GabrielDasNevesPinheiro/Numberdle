@@ -43,3 +43,5 @@ export default function postSlashCommands() {
 
     }
 }
+
+export { commands as CommandsArray }
