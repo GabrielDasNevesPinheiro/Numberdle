@@ -4,7 +4,7 @@ import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
 import Guild from "../database/Models/Guild";
 import { applyGameLogic, isValidMessage } from "./utils/Utils";
-import postSlashCommands from "../api/Register";
+import postSlashCommands, { CommandsArray } from "../api/Register";
 import { createDjsClient } from "discordbotlist";
 
 config();
@@ -22,6 +22,9 @@ client.on('ready', async () => {
     console.log(`Running... ${client.user?.tag}`);
     const dbl = createDjsClient(process.env.DBL, client);
     dbl.startPosting();
+    dbl.postBotCommands(
+        CommandsArray
+    );
     await sequelize.authenticate();
     await sequelize.sync();
 });
