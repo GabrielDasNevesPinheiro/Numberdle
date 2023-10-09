@@ -21,6 +21,7 @@ const client = new Client({
 client.on('ready', async () => {
     console.log(`Running... ${client.user?.tag}`);
     const dbl = createDjsClient(process.env.DBL, client);
+    dbl.startPosting();
     await sequelize.authenticate();
     await sequelize.sync();
 });
