@@ -5,7 +5,7 @@ import sequelize from "../database/Connection";
 import Guild from "../database/Models/Guild";
 import { applyGameLogic, isValidMessage } from "./utils/Utils";
 import postSlashCommands from "../api/Register";
-import { createDjsClient, createErisClient } from "discordbotlist";
+import { createDjsClient } from "discordbotlist";
 
 config();
 
