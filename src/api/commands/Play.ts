@@ -45,7 +45,7 @@ export default abstract class Play extends Command {
         
         if (!(player.lastPlayed < getTodayDate()) && player.lastPlayed) {
          
-            const cooldown =  24 - (getTodayDate().getHours() + 3); // + 3 for GMT 3 on server, remove if server has not
+            const cooldown =  24 - (getTodayDate().getHours() - 3); // - 3 for GMT 3 on server, remove if server has not
             return await interaction.editReply({ content: `Você poderá jogar em ${cooldown} horas` });
             
         }
