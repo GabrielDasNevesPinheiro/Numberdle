@@ -1,8 +1,8 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
-import Guild from "../../database/Models/Guild";
-import Player from "../../database/Models/Player";
 import { getTodayDate } from "../../core/utils/Utils";
+import { addGuildPlayer, getGuildById, getGuildDefaultChannel } from "../../database/Controllers/GuildController";
+import { createPlayer, getPlayerById } from "../../database/Controllers/PlayerController";
 
 type GameManager = {
     attempts: number,
@@ -21,23 +21,20 @@ export default abstract class Play extends Command {
 
         await interaction.deferReply({});
 
-        const { defaultChannel } = await Guild.findOne({ where: { guildId: interaction.guildId }});
+        const defaultChannel = await getGuildDefaultChannel(interaction.guildId);
         
-        let player = await Player.findOne({ where: { userId: interaction.user.id }});
+        let player = await getPlayerById(interaction.user.id);
         
-        const guild = await Guild.findOne({ where: {
-            guildId: interaction.guildId
-        }});
+        const guild = await getGuildById(interaction.guildId);
         
         if (interaction.channelId !== defaultChannel) return;
         
         if (!player) {
-            player = await Player.create({ userId: interaction.user.id, score: 0, username: interaction.user.username });
+            player = await createPlayer(interaction.user.id, 0, interaction.user.username);
         }
 
         if(!guild.players.includes(player.userId)) {
-            guild.players = [...guild.players, player.userId];
-            await guild.save();
+            await addGuildPlayer(guild.guildId, player.userId);
         }
 
         if(Play.inGame[player.userId]) {

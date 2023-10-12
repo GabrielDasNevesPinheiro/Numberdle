@@ -1,6 +1,6 @@
 import { CacheType, ChannelType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
-import Guild from "../../database/Models/Guild";
+import { createGuild, getGuildById, setDefaultChannel } from "../../database/Controllers/GuildController";
 
 export default abstract class SetChannel extends Command {
 
@@ -28,14 +28,11 @@ export default abstract class SetChannel extends Command {
 
         try {
 
-            const guild = await Guild.findOne({
-                where: { guildId: interaction.guildId }
-            });
+            const guild = await getGuildById(interaction.guildId);
 
-            if (!guild) await Guild.create({ defaultChannel: channel as string, guildId: interaction.guildId });
+            if (!guild) await createGuild(channel as string, interaction.guildId);
             if (guild) {
-                guild.defaultChannel = channel as string
-                await guild.save();
+                await setDefaultChannel(interaction.guildId, channel as string);
             }
 
         } catch (error) {

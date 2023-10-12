@@ -1,7 +1,7 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
-import Player from "../../database/Models/Player";
 import { getTodayDate } from "../../core/utils/Utils";
+import { getPlayerById } from "../../database/Controllers/PlayerController";
 
 export default abstract class NextNumber extends Command {
 
@@ -13,11 +13,7 @@ export default abstract class NextNumber extends Command {
 
         await interaction.deferReply({ ephemeral: true });
 
-        const user = await Player.findOne({
-            where: {
-                userId: interaction.user.id,
-            }
-        });
+        const user = await getPlayerById(interaction.user.id);
 
         if((user?.lastPlayed < getTodayDate()) || !user?.lastPlayed) {
             await interaction.editReply({ content: "Seu Numberdle de hoje está disponível"});

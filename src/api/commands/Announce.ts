@@ -1,6 +1,6 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder, TextChannel } from "discord.js";
 import Command from "./Command";
-import Guild from "../../database/Models/Guild";
+import { getGuildDefaultChannel } from "../../database/Controllers/GuildController";
 
 
 export default abstract class Announce extends Command {
@@ -23,7 +23,7 @@ export default abstract class Announce extends Command {
 
         interaction.client.guilds.cache.map(async (guild) => {
 
-            const { defaultChannel } = (await Guild.findOne({ where: { guildId: guild.id } }));
+            const defaultChannel = await getGuildDefaultChannel(guild.id);
 
             const channel = guild.channels.cache.get(defaultChannel) as TextChannel;
 

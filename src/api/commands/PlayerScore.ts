@@ -1,6 +1,6 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
-import Player from "../../database/Models/Player";
 import Command from "./Command";
+import { getPlayerById } from "../../database/Controllers/PlayerController";
 
 export default abstract class PlayerScore extends Command {
 
@@ -17,7 +17,7 @@ export default abstract class PlayerScore extends Command {
         await interaction.deferReply({ ephemeral: true });
         const user = interaction.options.getUser("user") || interaction.user;
 
-        const player = await Player.findOne({ where: { userId: user.id }});
+        const player = await getPlayerById(user.id);
 
         if (!player) {
             await interaction.editReply({ content: `O usuário ${user.username} nunca jogou Numberdle.` })

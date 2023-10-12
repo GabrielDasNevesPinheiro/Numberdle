@@ -1,6 +1,7 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
 import Player from "../../database/Models/Player";
+import { getPlayerById } from "../../database/Controllers/PlayerController";
 
 
 
@@ -18,7 +19,7 @@ export default abstract class SetName extends Command {
 
         await interaction.deferReply({ ephemeral: true });
 
-        let player = await Player.findOne({ where: { userId: interaction.user.id } });
+        let player = await getPlayerById(interaction.user.id);
 
         if (player) {
 

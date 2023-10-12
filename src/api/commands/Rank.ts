@@ -1,7 +1,8 @@
 import { CacheType, Colors, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
 import Player from "../../database/Models/Player";
-import Guild from "../../database/Models/Guild";
+import { getPlayers } from "../../database/Controllers/PlayerController";
+import { getGuildPlayers } from "../../database/Controllers/GuildController";
 
 export default abstract class Rank extends Command {
 
@@ -26,17 +27,11 @@ export default abstract class Rank extends Command {
         const { value: target } = interaction.options.get("target");
         
         if (target === "global"){
-            players = (await Player.findAll({ order: [['score', 'DESC']] })).slice(0, 10);
+            players = (await getPlayers()).slice(0, 10);
         }
         
         if (target === "local") {
-            const guildPlayers = (await Guild.findOne({ where: { guildId: interaction.guildId } })).players.slice(0, 10);
-            await Promise.all(guildPlayers.map(async (userId) => {
-                
-                const guildPlayer = await Player.findOne({ where: { userId } });
-                players.push(guildPlayer);
-                players.sort((first, next) => first.score > next.score ? -1 : 1);
-            }));
+            players = await getGuildPlayers(interaction.guildId);
         }
 
         let emojis = [':first_place:', ':second_place:', ':third_place:', '4', '5', '6', '7', '8', '9', '10'];

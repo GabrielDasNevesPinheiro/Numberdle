@@ -2,11 +2,11 @@ import { ChannelType, Client, GatewayIntentBits } from "discord.js";
 import { config } from "dotenv";
 import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
-import Guild from "../database/Models/Guild";
 import { applyGameLogic, isValidMessage } from "./utils/Utils";
 import postSlashCommands, { CommandsArray } from "../api/Register";
 import { createDjsClient } from "discordbotlist";
-import Player from "../database/Models/Player";
+import { getPlayerById } from "../database/Controllers/PlayerController";
+import { createGuild } from "../database/Controllers/GuildController";
 
 config();
 
@@ -29,7 +29,7 @@ client.on('ready', async () => {
     dbl.startPolling();
     dbl.on("vote", async (vote, client) => {
         
-        const player = await Player.findOne({ where: { userId: vote.id }});
+        const player = await getPlayerById(vote.id);
 
         if(player) {
             player.score += 150;
@@ -47,10 +47,7 @@ client.on('guildCreate', async (guild) => {
 
     const mainTextChannel = (await guild.channels.fetch()).filter((channel) => channel.type == ChannelType.GuildText).first();
 
-    await Guild.create({
-        guildId: guild.id,
-        defaultChannel: mainTextChannel.id
-    });
+    await createGuild(mainTextChannel.id, guild.id);
 
     client.users.send(guild.ownerId, "Obrigado por me adicionar em seu servidor, para me configurar basta definir um canal padrão para mim utilizando /setchannel em seu servidor! :)");
 

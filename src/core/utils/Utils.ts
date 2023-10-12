@@ -3,7 +3,7 @@
 import { Message } from "discord.js";
 import Guild from "../../database/Models/Guild";
 import Play from "../../api/commands/Play";
-import Player from "../../database/Models/Player";
+import { getPlayerById, setLastPlayed, setMultiplier } from "../../database/Controllers/PlayerController";
 
 export function getTodayDate() {
     const today = new Date();
@@ -42,7 +42,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     
     if (guess == Play.inGame[message.author.id].generatedNumber) {
 
-        const player = await Player.findOne({ where: { userId: message.author.id } });
+        const player = await getPlayerById(message.author.id);
 
         const scoreEarned = Math.floor((100 * Play.inGame[message.author.id].attempts) * player.multiplier);
         player.score += scoreEarned;
@@ -82,14 +82,12 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
     if (Play.inGame[message.author.id].attempts == 0) {
         
-        const player = await Player.findOne({ where: { userId: message.author.id } });
+        const multiplier = (await getPlayerById(message.author.id)).multiplier;
         
-        player.multiplier = 1.0;
+        message.reply(`Você já usou suas 10 tentativas e o número era ${Play.inGame[message.author.id].generatedNumber}  :( \nBoa sorte no próximo dia :)\nSeu bônus de x${multiplier} foi resetado.`);
         
-        message.reply(`Você já usou suas 10 tentativas e o número era ${Play.inGame[message.author.id].generatedNumber}  :( \n Boa sorte no próximo dia :)\nSeu bônus de x${player.multiplier} foi resetado.`);
-        
-        player.lastPlayed = getTodayDate();
-        await player.save();
+        await setMultiplier(message.author.id , 1.0);
+        await setLastPlayed(message.author.id, getTodayDate());
 
         delete Play.inGame[message.author.id];
         return;
