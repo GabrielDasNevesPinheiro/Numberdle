@@ -43,8 +43,12 @@ export default abstract class Play extends Command {
         }
         
         
-        if (!(player.lastPlayed < getTodayDate()) && player.lastPlayed) return await interaction.editReply({ content: "Você já jogou hoje." });
-
+        if (!(player.lastPlayed < getTodayDate()) && player.lastPlayed) {
+         
+            const cooldown =  24 - (getTodayDate().getHours());
+            return await interaction.editReply({ content: `Você poderá jogar em ${cooldown} horas` });
+            
+        }
         await interaction.editReply({ content: "Hmmmmm" });
 
         const number = Math.floor(Math.random() * 1000);
