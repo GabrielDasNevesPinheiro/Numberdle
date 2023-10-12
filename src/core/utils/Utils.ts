@@ -3,6 +3,7 @@
 import { Message } from "discord.js";
 import Guild from "../../database/Models/Guild";
 import Play from "../../api/commands/Play";
+import moment from "moment";
 import { getPlayerById, setLastPlayed, setMultiplier } from "../../database/Controllers/PlayerController";
 
 export function getTodayDate() {
@@ -10,11 +11,18 @@ export function getTodayDate() {
     const year = today.getFullYear();
     let month = today.getMonth();
     let day = today.getDate();
-
+    
     month = month < 10 ? Number(`0${month}`) : month;
     day = day < 10 ? Number(`0${day}`) : day;
+    
+    const diff = moment.duration({ hours: 3, minutes: 0 }); // server GMT +3
 
-    return new Date(year, month, day);
+    const fullToday = moment(new Date(year, month, day));
+
+    const date = moment(fullToday);
+    const calculated = date.subtract(diff).toDate();
+
+    return calculated;
 }
 
 
