@@ -21,6 +21,7 @@ export function getTodayDate() {
 
     const date = moment(fullToday);
     const calculated = date.subtract(diff).toDate();
+    calculated.setHours(0,0,0,0);
 
     return calculated;
 }
