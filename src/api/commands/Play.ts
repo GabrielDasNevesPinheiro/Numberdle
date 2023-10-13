@@ -22,40 +22,36 @@ export default abstract class Play extends Command {
         await interaction.deferReply({});
 
         const defaultChannel = await getGuildDefaultChannel(interaction.guildId);
-        
+
         let player = await getPlayerById(interaction.user.id);
-        
+
         const guild = await getGuildById(interaction.guildId);
-        
+
         if (interaction.channelId !== defaultChannel) return;
-        
+
         if (!player) {
             player = await createPlayer(interaction.user.id, 0, interaction.user.username);
         }
 
-        if(!guild.players.includes(player.userId)) {
+        if (!guild.players.includes(player.userId)) {
             await addGuildPlayer(guild.guildId, player.userId);
         }
 
-        if(Play.inGame[player.userId]) {
-            await interaction.editReply({ content: "Você já está em jogo :p"});
+        if (Play.inGame[player.userId]) {
+            await interaction.editReply({ content: "Você já está em jogo :p" });
             return;
         }
+
+
+        if (!(player.lastPlayed < getTodayDate()) && player.lastPlayed) return await interaction.editReply({ content: `Volte aqui 00:00 de amanhã` });
         
-        
-        if (!(player.lastPlayed < getTodayDate()) && player.lastPlayed) {
-         
-            const cooldown =  24 - (getTodayDate().getHours() - 3); // - 3 for GMT 3 on server, remove if server has not
-            return await interaction.editReply({ content: `Você poderá jogar em ${cooldown} horas` });
-            
-        }
         await interaction.editReply({ content: "Hmmmmm" });
 
         const number = Math.floor(Math.random() * 1000);
 
         Play.inGame[player.userId] = { attempts: 10, generatedNumber: number }
 
-        await interaction.editReply({ content: "Advinhe o seu número entre 0 e 1000 em até 10 chances!"});
+        await interaction.editReply({ content: "Advinhe o seu número entre 0 e 1000 em até 10 chances!" });
 
     }
 }
