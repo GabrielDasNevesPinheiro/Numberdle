@@ -1,11 +1,9 @@
-import { ChannelType, Client, GatewayIntentBits } from "discord.js";
+import { ActivityType, ChannelType, Client, GatewayIntentBits } from "discord.js";
 import { config } from "dotenv";
 import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
 import { applyGameLogic, isValidMessage } from "./utils/Utils";
-import postSlashCommands, { CommandsArray } from "../api/Register";
-import { createDjsClient } from "discordbotlist";
-import { getPlayerById } from "../database/Controllers/PlayerController";
+import postSlashCommands from "../api/Register";
 import { createGuild } from "../database/Controllers/GuildController";
 
 config();
@@ -22,8 +20,15 @@ const client = new Client({
 client.on('ready', async () => {
     await sequelize.authenticate();
     await sequelize.sync();
+
+    client.user.setActivity({ 
+        name: "Ganhe pontos votando",
+        state: "",
+        type: ActivityType.Custom,
+        url: 'https://discord.ly/numberdle'
+    });
     
-    const dbl = createDjsClient(process.env.DBL, client);
+    /*const dbl = createDjsClient(process.env.DBL, client);
     dbl.startPosting();
     dbl.postBotCommands(CommandsArray);
     dbl.startPolling();
@@ -37,7 +42,7 @@ client.on('ready', async () => {
         }
 
         console.log(`VOTE EVENT[${vote.username}]`);
-    });
+    });*/
 
     console.log(`Running... ${client.user?.tag}`);
 
