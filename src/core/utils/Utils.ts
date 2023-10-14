@@ -11,17 +11,17 @@ export function getTodayDate() {
     const year = today.getFullYear();
     let month = today.getMonth();
     let day = today.getDate();
-    
+
     month = month < 10 ? Number(`0${month}`) : month;
     day = day < 10 ? Number(`0${day}`) : day;
-    
+
     const diff = moment.duration({ hours: 3, minutes: 0 }); // server GMT +3
 
     const fullToday = moment(new Date(year, month, day));
 
     const date = moment(fullToday);
     const calculated = date.subtract(diff).toDate();
-    calculated.setHours(0,0,0,0);
+    calculated.setHours(0, 0, 0, 0);
 
     return calculated;
 }
@@ -48,7 +48,7 @@ export async function isValidMessage(message: Message<boolean>, clientId: string
 }
 
 export async function applyGameLogic(message: Message<boolean>, guess: number) {
-    
+
     if (guess == Play.inGame[message.author.id].generatedNumber) {
 
         const player = await getPlayerById(message.author.id);
@@ -57,9 +57,9 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         player.score += scoreEarned;
         player.lastPlayed = getTodayDate();
 
-        
+
         message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier} de bônus)`);
-        
+
         player.multiplier += 0.1;
         player.multiplier = Number(player.multiplier.toFixed(1));
         await player.save();
@@ -79,7 +79,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     }
 
     if (Play.inGame[message.author.id].attempts == 3) {
-        
+
         let len = Play.inGame[message.author.id].generatedNumber.toString().length - 1
         let toSub = Number(Play.inGame[message.author.id].generatedNumber.toString()[len])
 
@@ -90,12 +90,12 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     }
 
     if (Play.inGame[message.author.id].attempts == 0) {
-        
+
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
-        
+
         message.reply(`Você já usou suas 10 tentativas e o número era ${Play.inGame[message.author.id].generatedNumber}  :( \nBoa sorte no próximo dia :)\nSeu bônus de x${multiplier} foi resetado.`);
-        
-        await setMultiplier(message.author.id , 1.0);
+
+        await setMultiplier(message.author.id, 1.0);
         await setLastPlayed(message.author.id, getTodayDate());
 
         delete Play.inGame[message.author.id];
