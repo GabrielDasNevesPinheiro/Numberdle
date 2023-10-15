@@ -16,11 +16,12 @@ export function getTodayDate() {
     day = day < 10 ? Number(`0${day}`) : day;
 
     const diff = moment.duration({ hours: 3, minutes: 0 }); // server GMT +3
+    
 
     const fullToday = moment(new Date(year, month, day));
 
     const date = moment(fullToday);
-    const calculated = date.subtract(diff).toDate();
+    const calculated = date.toDate();
     calculated.setHours(0, 0, 0, 0);
 
     return calculated;
