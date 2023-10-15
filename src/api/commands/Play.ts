@@ -1,6 +1,6 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
-import { getTodayDate } from "../../core/utils/Utils";
+import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
 import { addGuildPlayer, getGuildById, getGuildDefaultChannel } from "../../database/Controllers/GuildController";
 import { createPlayer, getPlayerById } from "../../database/Controllers/PlayerController";
 
@@ -42,12 +42,12 @@ export default abstract class Play extends Command {
             return;
         }
 
-        const now = new Date();
-        now.setHours(0,0,0);
+        const timeDiff = getTimeDiff(player?.lastPlayed);
+        console.log(timeDiff);
 
-        console.log(`${player.username}: ${player.lastPlayed} / ${getTodayDate()} / ${now}`);
-
-        if (!(player.lastPlayed < getTodayDate()) && player.lastPlayed) return await interaction.editReply({ content: `Volte aqui 00:00 de amanhã` });
+        if (!(timeDiff >= 24)) {
+            return await interaction.editReply({ content: `Você poderá jogar em ${24 - timeDiff} horas` });
+        }
         
         await interaction.editReply({ content: "Hmmmmm" });
 

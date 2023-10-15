@@ -7,26 +7,25 @@ import moment from "moment";
 import { getPlayerById, setLastPlayed, setMultiplier } from "../../database/Controllers/PlayerController";
 
 export function getTodayDate() {
-    const today = new Date();
-    const year = today.getFullYear();
-    let month = today.getMonth();
-    let day = today.getDate();
-
-    month = month < 10 ? Number(`0${month}`) : month;
-    day = day < 10 ? Number(`0${day}`) : day;
-
-    const diff = moment.duration({ hours: 3, minutes: 0 }); // server GMT +3
     
-
-    const fullToday = moment(new Date(year, month, day));
-
-    const date = moment(fullToday);
-    const calculated = date.toDate();
-    calculated.setHours(0, 0, 0, 0);
-
-    return calculated;
+    return moment(new Date()).toDate();
+    
 }
 
+
+export function getTimeDiff(date1: Date) { // gets the hour offset between the given date and now
+
+    if(!date1) return 24;
+
+    const firstDate = moment(date1); // Substitua com sua data de ontem
+    const now = moment(); // A data atual é usada aqui
+
+    const diff = now.diff(firstDate, 'hours');
+
+    console.log(`${date1} / ${now} / ${diff}`);
+
+    return diff;
+}
 
 export async function isValidMessage(message: Message<boolean>, clientId: string): Promise<boolean> {
 

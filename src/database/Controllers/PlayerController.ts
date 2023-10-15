@@ -44,6 +44,7 @@ async function setLastPlayed(userId: string, date: Date) {
 
     const player = await getPlayerById(userId);
     player.lastPlayed = date;
+    await player.save();
 
 }
 
@@ -51,6 +52,7 @@ async function setMultiplier(userId: string, multiplier: number) {
     
     const player = await getPlayerById(userId);
     player.multiplier = multiplier;
+    await player.save();
 
 }
 

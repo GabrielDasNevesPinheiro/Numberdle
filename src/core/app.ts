@@ -6,7 +6,7 @@ import { applyGameLogic, isValidMessage } from "./utils/Utils";
 import postSlashCommands, { CommandsArray } from "../api/Register";
 import { createGuild } from "../database/Controllers/GuildController";
 import { createDjsClient } from "discordbotlist";
-import { getPlayerById } from "../database/Controllers/PlayerController";
+import { getPlayerById, getPlayers } from "../database/Controllers/PlayerController";
 
 config();
 
@@ -30,7 +30,7 @@ client.on('ready', async () => {
         url: 'https://discord.ly/numberdle'
     });
     
-    const dbl = createDjsClient(process.env.DBL, client);
+    /*const dbl = createDjsClient(process.env.DBL, client);
     dbl.startPosting();
     dbl.postBotCommands(CommandsArray);
     dbl.startPolling();
@@ -44,7 +44,7 @@ client.on('ready', async () => {
         }
 
         console.log(`VOTE EVENT[${vote.username}]`);
-    });
+    });*/
 
     console.log(`Running... ${client.user?.tag}`);
 
