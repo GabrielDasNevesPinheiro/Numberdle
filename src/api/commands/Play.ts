@@ -42,8 +42,9 @@ export default abstract class Play extends Command {
             return;
         }
 
+        console.log(`${player.username}: ${player.lastPlayed} / ${getTodayDate()}`);
 
-        if (!(player.lastPlayed < new Date()) && player.lastPlayed) return await interaction.editReply({ content: `Volte aqui 00:00 de amanhã` });
+        if (!(player.lastPlayed < getTodayDate()) && player.lastPlayed) return await interaction.editReply({ content: `Volte aqui 00:00 de amanhã` });
         
         await interaction.editReply({ content: "Hmmmmm" });
 
