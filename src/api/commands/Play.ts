@@ -43,7 +43,6 @@ export default abstract class Play extends Command {
         }
 
         const timeDiff = getTimeDiff(player?.lastPlayed);
-        console.log(timeDiff);
 
         if (!(timeDiff >= 24)) {
             return await interaction.editReply({ content: `Você poderá jogar em ${24 - timeDiff} horas` });
