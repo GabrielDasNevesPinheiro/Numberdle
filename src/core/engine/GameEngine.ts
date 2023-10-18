@@ -4,7 +4,6 @@ export default class GameEngine {
 
     public score_multiplier = 100;
     public max_attempts = 10;
-    public cooldown = 24; // hours
     public tip_attempt = 3; // by attempts left
     public tip_range = 0;
 
