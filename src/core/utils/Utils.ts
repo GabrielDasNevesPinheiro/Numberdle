@@ -22,8 +22,6 @@ export function getTimeDiff(date1: Date) { // gets the hour offset between the g
 
     const diff = now.diff(firstDate, 'hours');
 
-    console.log(`${date1} / ${now} / ${diff}`);
-
     return diff;
 }
 
@@ -49,18 +47,21 @@ export async function isValidMessage(message: Message<boolean>, clientId: string
 
 export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
+    const { playerEngine } = Play.inGame[message.author.id];
+
     if (guess == Play.inGame[message.author.id].generatedNumber) {
 
         const player = await getPlayerById(message.author.id);
 
-        const scoreEarned = Math.floor((100 * Play.inGame[message.author.id].attempts) * player.multiplier);
+
+        const scoreEarned = Math.floor((playerEngine.score_multiplier * Play.inGame[message.author.id].attempts) * player.multiplier);
         player.score += scoreEarned;
         player.lastPlayed = getTodayDate();
 
 
         message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier} de bônus)`);
 
-        player.multiplier += 0.1;
+        player.multiplier += playerEngine.multiplier_gain;
         player.multiplier = Number(player.multiplier.toFixed(1));
         await player.save();
 
@@ -78,15 +79,12 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         Play.inGame[message.author.id].attempts -= 1;
     }
 
-    if (Play.inGame[message.author.id].attempts == 3) {
+    if (Play.inGame[message.author.id].attempts == playerEngine.tip_attempt) {
 
-        let len = Play.inGame[message.author.id].generatedNumber.toString().length - 1
-        let toSub = Number(Play.inGame[message.author.id].generatedNumber.toString()[len])
-
-        const minRange = (Play.inGame[message.author.id].generatedNumber) - toSub
-        const maxRange = (Play.inGame[message.author.id].generatedNumber + 10) - toSub
-
-        message.reply(`Você tem só mais 3 tentativas! Seu número está entre ${minRange} e ${maxRange}`);
+        message.reply(playerEngine.buildTipMessage({
+            attempts_left: Play.inGame[message.author.id].attempts,
+            random_number: Play.inGame[message.author.id].generatedNumber
+        }));
     }
 
     if (Play.inGame[message.author.id].attempts == 0) {
@@ -95,7 +93,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         message.reply(`Você já usou suas 10 tentativas e o número era ${Play.inGame[message.author.id].generatedNumber}  :( \nBoa sorte no próximo dia :)\nSeu bônus de x${multiplier} foi resetado.`);
 
-        await setMultiplier(message.author.id, 1.0);
+        await setMultiplier(message.author.id, playerEngine.multiplier_reset);
         await setLastPlayed(message.author.id, getTodayDate());
 
         delete Play.inGame[message.author.id];

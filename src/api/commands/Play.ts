@@ -3,10 +3,12 @@ import Command from "./Command";
 import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
 import { addGuildPlayer, getGuildById, getGuildDefaultChannel } from "../../database/Controllers/GuildController";
 import { createPlayer, getPlayerById } from "../../database/Controllers/PlayerController";
+import GameEngine from "../../core/engine/GameEngine";
 
 type GameManager = {
     attempts: number,
     generatedNumber: number,
+    playerEngine: GameEngine
 }
 
 export default abstract class Play extends Command {
@@ -50,11 +52,14 @@ export default abstract class Play extends Command {
         
         await interaction.editReply({ content: "Hmmmmm" });
 
-        const number = Math.floor(Math.random() * 1000);
+        const engine = new GameEngine();
+        //here must have buff checker, something like that
 
-        Play.inGame[player.userId] = { attempts: 10, generatedNumber: number }
+        const number = engine.generateNumberdle();
 
-        await interaction.editReply({ content: "Advinhe o seu número entre 0 e 1000 em até 10 chances!" });
+        Play.inGame[player.userId] = { attempts: 10, generatedNumber: number, playerEngine: engine }
+
+        await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Play.inGame[player.userId].attempts} chances!` });
 
     }
 }
