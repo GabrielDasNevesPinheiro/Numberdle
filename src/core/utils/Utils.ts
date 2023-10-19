@@ -82,10 +82,22 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
     if (Playing.inGame[message.author.id].attempts == playerEngine.tip_attempt) {
 
-        message.reply(playerEngine.buildTipMessage({
-            attempts_left: Playing.inGame[message.author.id].attempts,
-            random_number: Playing.inGame[message.author.id].generatedNumber
-        }));
+        if(playerEngine.tip_message)
+            message.reply(playerEngine.tip_message);
+            playerEngine.tip_message = undefined;
+
+        if(!playerEngine.wrap_default_tip && Playing.inGame[message.author.id].attempts > 3) {
+            playerEngine.tip_attempt = 3;
+            return;
+        }
+
+        if(!playerEngine.wrap_default_tip) {
+            message.reply(playerEngine.buildTipMessage({
+                attempts_left: Playing.inGame[message.author.id].attempts,
+                random_number: Playing.inGame[message.author.id].generatedNumber
+            }));
+        }
+
     }
 
     if (Playing.inGame[message.author.id].attempts == 0) {

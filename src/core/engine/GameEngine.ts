@@ -8,6 +8,8 @@ export default class GameEngine {
     public max_attempts = 10;
     public tip_attempt = 3; // by attempts left
     public tip_range = 0;
+    public wrap_default_tip = false;
+    public tip_message = "";
 
     public generateNumberdle() {
         const number = Math.floor(Math.random() * 1000);
@@ -19,6 +21,7 @@ export default class GameEngine {
         const { attempts_left, adittional, overwrite, random_number } = args;
 
         if (overwrite) {
+            this.tip_message = args.overwrite;
             return args.overwrite;
         }
 
@@ -45,7 +48,7 @@ export default class GameEngine {
         if (adittional) {
             tip += `Você tem só mais ${attempts_left} tentativas! ${adittional}`
         }
-
+        this.tip_message = tip;
         return tip;
 
     }
