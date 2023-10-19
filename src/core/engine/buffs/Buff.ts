@@ -4,28 +4,33 @@ import { Rarity } from "../enum/Rarity";
 
 interface Initializer {
     name: string
+    price: number
     description: string
-    rarity: Rarity;
-    targets: Attributes[];
+    rarity: Rarity
+    targets: Attributes[]
+    apply: (userId: string) => void
 }
 
 export default class Buff {
 
-    protected _name: string;
-    protected _description: string;
-    protected _rarity: Rarity;
-    protected _targets: Attributes[];
-    protected _apply: (userId: string) => void;
+    private _name: string;
+    private _price: number;
+    private _description: string;
+    private _rarity: Rarity;
+    private _targets: Attributes[];
+    private _apply: (userId: string) => void;
 
 
     constructor(data: Initializer) {
 
-        const { name, description, rarity, targets } = data;
+        const { name, price, description, rarity, targets, apply } = data;
 
         this.name = name;
+        this.price = price;
         this.description = description;
         this.rarity = rarity;
         this.targets = targets;
+        this.apply = apply
 
     }
 
@@ -46,7 +51,7 @@ export default class Buff {
         return this._name;
     }
 
-    protected set name(value: string | undefined) {
+    private set name(value: string | undefined) {
         this._name = value;
     }
 
@@ -54,7 +59,7 @@ export default class Buff {
         return this._description;
     }
 
-    protected set description(value: string | undefined) {
+    private set description(value: string | undefined) {
         this._description = value;
     }
 
@@ -62,7 +67,7 @@ export default class Buff {
         return this._rarity;
     }
 
-    protected set rarity(value: Rarity | undefined) {
+    private set rarity(value: Rarity | undefined) {
         this._rarity = value;
     }
 
@@ -70,7 +75,7 @@ export default class Buff {
         return this._targets;
     }
 
-    protected set targets(value: Attributes[] | undefined) {
+    private set targets(value: Attributes[] | undefined) {
         this._targets = value;
     }
 
@@ -79,5 +84,12 @@ export default class Buff {
     }
     public set apply(value: (userId: string) => void) {
       this._apply = value;
+    }
+
+    public get price(): number {
+      return this._price;
+    }
+    private set price(value: number) {
+      this._price = value;
     }
 }
