@@ -82,7 +82,7 @@ export default class Buff {
     public get apply(): (userId: string) => void {
       return this._apply;
     }
-    public set apply(value: (userId: string) => void) {
+    private set apply(value: (userId: string) => void) {
       this._apply = value;
     }
 
