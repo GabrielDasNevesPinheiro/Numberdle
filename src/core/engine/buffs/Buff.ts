@@ -30,7 +30,7 @@ export default class Buff {
         this.description = description;
         this.rarity = rarity;
         this.targets = targets;
-        this.apply = apply
+        this.apply = apply;
 
     }
 
