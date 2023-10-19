@@ -37,7 +37,7 @@ export default class Buff {
 
         let repeated = temp.filter((value, index, array) => array.indexOf(value) !== index);
 
-        return repeated.length ? true : false;
+        return repeated.length ? false : true;
 
     }
 
