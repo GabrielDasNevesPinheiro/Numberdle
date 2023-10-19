@@ -8,15 +8,15 @@ import { getPlayerById, setLastPlayed, setMultiplier } from "../../database/Cont
 import { Playing } from "../engine/Playing";
 
 export function getTodayDate() {
-    
+
     return moment(new Date()).toDate();
-    
+
 }
 
 
 export function getTimeDiff(date1: Date) { // gets the hour offset between the given date and now
 
-    if(!date1) return 24;
+    if (!date1) return 24;
 
     const firstDate = moment(date1); // Substitua com sua data de ontem
     const now = moment(); // A data atual é usada aqui
@@ -82,16 +82,16 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
     if (Playing.inGame[message.author.id].attempts == playerEngine.tip_attempt) {
 
-        if(playerEngine.tip_message)
+        if (playerEngine.tip_message)
             message.reply(playerEngine.tip_message);
-            playerEngine.tip_message = undefined;
+        playerEngine.tip_message = undefined;
 
-        if(!playerEngine.wrap_default_tip && Playing.inGame[message.author.id].attempts > 3) {
+        if (!playerEngine.wrap_default_tip && Playing.inGame[message.author.id].attempts > 3) {
             playerEngine.tip_attempt = 3;
             return;
         }
 
-        if(!playerEngine.wrap_default_tip) {
+        if (!playerEngine.wrap_default_tip) {
             message.reply(playerEngine.buildTipMessage({
                 attempts_left: Playing.inGame[message.author.id].attempts,
                 random_number: Playing.inGame[message.author.id].generatedNumber
@@ -112,4 +112,28 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         delete Playing.inGame[message.author.id];
         return;
     }
+}
+
+export function isPrime(num: number): boolean {
+    if (num <= 1) {
+        return false;
+    }
+
+    if (num <= 3) {
+        return true;
+    }
+
+    if (num % 2 === 0 || num % 3 === 0) {
+        return false;
+    }
+
+    let i = 5;
+    while (i * i <= num) {
+        if (num % i === 0 || num % (i + 2) === 0) {
+            return false;
+        }
+        i += 6;
+    }
+
+    return true;
 }
