@@ -4,16 +4,10 @@ import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
 import { addGuildPlayer, getGuildById, getGuildDefaultChannel } from "../../database/Controllers/GuildController";
 import { createPlayer, getPlayerById } from "../../database/Controllers/PlayerController";
 import GameEngine from "../../core/engine/GameEngine";
-
-type GameManager = {
-    attempts: number,
-    generatedNumber: number,
-    playerEngine: GameEngine
-}
+import { Playing } from "../../core/engine/Playing";
 
 export default abstract class Play extends Command {
 
-    static inGame: { [userId: string]: GameManager } = {}
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .setName("play")
@@ -39,7 +33,7 @@ export default abstract class Play extends Command {
             await addGuildPlayer(guild.guildId, player.userId);
         }
 
-        if (Play.inGame[player.userId]) {
+        if (Playing.inGame[player.userId]) {
             await interaction.editReply({ content: "Você já está em jogo :p" });
             return;
         }
@@ -57,9 +51,9 @@ export default abstract class Play extends Command {
 
         const number = engine.generateNumberdle();
 
-        Play.inGame[player.userId] = { attempts: 10, generatedNumber: number, playerEngine: engine }
+        Playing.inGame[player.userId] = { attempts: 10, generatedNumber: number, playerEngine: engine }
 
-        await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Play.inGame[player.userId].attempts} chances!` });
+        await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Playing.inGame[player.userId].attempts} chances!` });
 
     }
 }

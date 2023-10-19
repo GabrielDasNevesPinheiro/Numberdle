@@ -5,6 +5,7 @@ import Guild from "../../database/Models/Guild";
 import Play from "../../api/commands/Play";
 import moment from "moment";
 import { getPlayerById, setLastPlayed, setMultiplier } from "../../database/Controllers/PlayerController";
+import { Playing } from "../engine/Playing";
 
 export function getTodayDate() {
     
@@ -33,7 +34,7 @@ export async function isValidMessage(message: Message<boolean>, clientId: string
 
     if (message.channelId !== defaultChannel) return false; // dont answer if is not Numberdle's channel
 
-    if (!Play.inGame[message.author.id]) { // if true, player is not playing Numberdle yet to guess his number
+    if (!Playing.inGame[message.author.id]) { // if true, player is not playing Numberdle yet to guess his number
         return false;
     };
 
@@ -47,14 +48,14 @@ export async function isValidMessage(message: Message<boolean>, clientId: string
 
 export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
-    const { playerEngine } = Play.inGame[message.author.id];
+    const { playerEngine } = Playing.inGame[message.author.id];
 
-    if (guess == Play.inGame[message.author.id].generatedNumber) {
+    if (guess == Playing.inGame[message.author.id].generatedNumber) {
 
         const player = await getPlayerById(message.author.id);
 
 
-        const scoreEarned = Math.floor((playerEngine.score_multiplier * Play.inGame[message.author.id].attempts) * player.multiplier);
+        const scoreEarned = Math.floor((playerEngine.score_multiplier * Playing.inGame[message.author.id].attempts) * player.multiplier);
         player.score += scoreEarned;
         player.lastPlayed = getTodayDate();
 
@@ -65,38 +66,38 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         player.multiplier = Number(player.multiplier.toFixed(1));
         await player.save();
 
-        delete Play.inGame[message.author.id];
+        delete Playing.inGame[message.author.id];
         return;
     }
 
-    if (guess < Play.inGame[message.author.id].generatedNumber) {
+    if (guess < Playing.inGame[message.author.id].generatedNumber) {
         message.react('➕');
-        Play.inGame[message.author.id].attempts -= 1;
+        Playing.inGame[message.author.id].attempts -= 1;
     }
 
-    if (guess > Play.inGame[message.author.id].generatedNumber) {
+    if (guess > Playing.inGame[message.author.id].generatedNumber) {
         message.react('➖');
-        Play.inGame[message.author.id].attempts -= 1;
+        Playing.inGame[message.author.id].attempts -= 1;
     }
 
-    if (Play.inGame[message.author.id].attempts == playerEngine.tip_attempt) {
+    if (Playing.inGame[message.author.id].attempts == playerEngine.tip_attempt) {
 
         message.reply(playerEngine.buildTipMessage({
-            attempts_left: Play.inGame[message.author.id].attempts,
-            random_number: Play.inGame[message.author.id].generatedNumber
+            attempts_left: Playing.inGame[message.author.id].attempts,
+            random_number: Playing.inGame[message.author.id].generatedNumber
         }));
     }
 
-    if (Play.inGame[message.author.id].attempts == 0) {
+    if (Playing.inGame[message.author.id].attempts == 0) {
 
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
 
-        message.reply(`Você já usou suas 10 tentativas e o número era ${Play.inGame[message.author.id].generatedNumber}  :( \nBoa sorte no próximo dia :)\nSeu bônus de x${multiplier} foi resetado.`);
+        message.reply(`Você já usou suas 10 tentativas e o número era ${Playing.inGame[message.author.id].generatedNumber}  :( \nBoa sorte no próximo dia :)\nSeu bônus de x${multiplier} foi resetado.`);
 
         await setMultiplier(message.author.id, playerEngine.multiplier_reset);
         await setLastPlayed(message.author.id, getTodayDate());
 
-        delete Play.inGame[message.author.id];
+        delete Playing.inGame[message.author.id];
         return;
     }
 }
