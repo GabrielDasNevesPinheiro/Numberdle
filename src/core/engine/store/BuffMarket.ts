@@ -21,11 +21,11 @@ export const BuffMarket = [
             const { generatedNumber } = Playing.inGame[userId];
 
             Playing.inGame[userId].playerEngine.tip_attempt = 10;
-            Playing.inGame[userId].playerEngine.wrap_default_tip = true;
             Playing.inGame[userId].playerEngine.tip_message = `O número é ${generatedNumber >= 500 ? ">= 500" : "<= 500"}`;
 
         }
     }),
+
     new Buff({
         name: "O Dialeto das Prima",
         price: 200,
@@ -39,8 +39,110 @@ export const BuffMarket = [
             const primo = isPrime(generatedNumber);
 
             Playing.inGame[userId].playerEngine.tip_attempt = 10;
-            Playing.inGame[userId].playerEngine.wrap_default_tip = false;
-            Playing.inGame[userId].playerEngine.tip_message = `O número ${ primo ? "é primo" : "não é primo"}.`;
+            Playing.inGame[userId].playerEngine.tip_message = `O número ${primo ? "é primo" : "não é primo"}.`;
+
+        }
+    }),
+
+    new Buff({
+        name: "Auxílio da Beneficente",
+        price: 320,
+        rarity: Rarity.RARE,
+        description: 'Você será beneficiado com a antecipação da dica padrão, sua dica aparecerá quando restarem 6 tentativas.',
+        targets: [Attributes.TIP_TIME],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.default_tip_attempt = 6;
+            Playing.inGame[userId].playerEngine.tip_message = undefined;
+
+
+        }
+    }),
+
+    new Buff({
+        name: "Esmola do Sábio",
+        price: 330,
+        rarity: Rarity.RARE,
+        description: 'O Sábio sabe muito, ao comprar, ele irá melhorar muito a dica.',
+        targets: [Attributes.TIP_TYPE],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.wrap_default_tip = true;
+            Playing.inGame[userId].playerEngine.tip_range = 2;
+            Playing.inGame[userId].playerEngine.tip_message = Playing.inGame[userId].playerEngine.buildTipMessage({
+                attempts_left: Playing.inGame[userId].playerEngine.tip_attempt,
+                random_number: Playing.inGame[userId].generatedNumber,
+            });
+
+
+        }
+    }),
+
+    new Buff({
+        name: "Ajudante Divino",
+        price: 400,
+        rarity: Rarity.EPIC,
+        description: 'Quando faltarem 7 tentativas, Você receberá a Dica Divina.',
+        targets: [Attributes.TIP_TYPE, Attributes.TIP_TIME],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.wrap_default_tip = true;
+            Playing.inGame[userId].playerEngine.tip_attempt = 7;
+            const { generatedNumber } = Playing.inGame[userId];
+
+            let len = generatedNumber.toString().length - 1;
+            let toSub = Number(generatedNumber.toString()[len]);
+
+            const minRange = generatedNumber - toSub;
+            const maxRange = (generatedNumber + 10) - toSub;
+
+            let numbers = [];
+            let isnot = [];
+
+            for (let i = minRange; i <= maxRange; i++) {
+                numbers.push(i);
+            }
+
+            for (let i = 1; i <= 5;) {
+                let rand = Math.floor(Math.random() * (maxRange - minRange));
+
+                if (numbers[rand] != generatedNumber && isnot.indexOf(numbers[rand]) == -1) {
+                    isnot.push(numbers[rand]);
+                    i++;
+                }
+            }
+
+            Playing.inGame[userId].playerEngine.tip_message = Playing.inGame[userId].playerEngine.buildTipMessage({
+                attempts_left: Playing.inGame[userId].playerEngine.tip_attempt,
+                random_number: Playing.inGame[userId].generatedNumber,
+                adittional: `Mas não é nenhum desses números: [${isnot.map((num) => `${num}`)}]`
+            });
+
+
+
+        }
+    }),
+
+    new Buff({
+        name: "O Corrupto",
+        price: 460,
+        rarity: Rarity.EPIC,
+        description: 'Ao aderir a corrupção, a dica aparece ao iniciar o jogo.',
+        targets: [Attributes.TIP_TIME],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.default_tip_attempt = 10;
+            Playing.inGame[userId].playerEngine.tip_message = Playing.inGame[userId].playerEngine.buildTipMessage({
+                attempts_left: Playing.inGame[userId].playerEngine.default_tip_attempt,
+                random_number: Playing.inGame[userId].generatedNumber
+
+            });
+
+
 
         }
     }),
