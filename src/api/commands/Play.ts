@@ -53,10 +53,10 @@ export default abstract class Play extends Command {
         
         Playing.inGame[player.userId] = { attempts: 10, generatedNumber: number, playerEngine: engine }
 
-        BuffMarket[0].apply(player.userId);
-        const { tip_attempt } = Playing.inGame[player.userId].playerEngine;
+        BuffMarket[5].apply(player.userId);
+        const { tip_attempt, default_tip_attempt } = Playing.inGame[player.userId].playerEngine;
         const { tip_message } = Playing.inGame[player.userId].playerEngine;
-        await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Playing.inGame[player.userId].attempts} chances! ${ tip_attempt == 10 ? tip_message : ""}` });
+        await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Playing.inGame[player.userId].attempts} chances! ${ tip_attempt == 10 || default_tip_attempt == 10 ? tip_message : ""}` });
 
     }
 }
