@@ -20,7 +20,7 @@ export const BuffMarket = [
 
             const { generatedNumber } = Playing.inGame[userId];
 
-            Playing.inGame[userId].playerEngine.tip_attempt = 10;
+            Playing.inGame[userId].playerEngine.tip_attempt = Playing.inGame[userId].playerEngine.max_attempts;
             Playing.inGame[userId].playerEngine.tip_message = `O número é ${generatedNumber >= 500 ? ">= 500" : "<= 500"}`;
 
         }
@@ -38,7 +38,7 @@ export const BuffMarket = [
             const { generatedNumber } = Playing.inGame[userId];
             const primo = isPrime(generatedNumber);
 
-            Playing.inGame[userId].playerEngine.tip_attempt = 10;
+            Playing.inGame[userId].playerEngine.tip_attempt = Playing.inGame[userId].playerEngine.max_attempts;
             Playing.inGame[userId].playerEngine.tip_message = `O número ${primo ? "é primo" : "não é primo"}.`;
 
         }
@@ -146,4 +146,67 @@ export const BuffMarket = [
 
         }
     }),
+
+    new Buff({
+        name: "Vantagem do Contador",
+        price: 200,
+        rarity: Rarity.NORMAL,
+        description: 'Concede ao portador 1 tentativa extra no jogo, totalizando 11 ao invés de 10.',
+        targets: [Attributes.ATTEMPTS],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.max_attempts = 11;
+            Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
+        
+        }
+    }),
+
+    new Buff({
+        name: "Sabotagem Iminente",
+        price: 240,
+        rarity: Rarity.NORMAL,
+        description: 'Reduz o número das tentativas para 5 e adiciona 0.3x no seu multiplicador se acertar.',
+        targets: [Attributes.ATTEMPTS, Attributes.MULTIPLIER],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.max_attempts = 5;
+            Playing.inGame[userId].playerEngine.multiplier_gain = 0.3;
+            Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
+        
+        }
+    }),
+    
+    new Buff({
+        name: "A Desvantagem da Ganância",
+        price: 240,
+        rarity: Rarity.RARE,
+        description: 'Reduz o número das tentativas para 8, mas você ganha 1.3x mais pontos se acertar.',
+        targets: [Attributes.ATTEMPTS],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.max_attempts = 8;
+            Playing.inGame[userId].playerEngine.score_multiplier *= 1.3;
+            Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
+        
+        }
+    }),
+
+    new Buff({
+        name: "As Segundas Chances",
+        price: 240,
+        rarity: Rarity.RARE,
+        description: 'Aumenta o número de tentativas para 12.',
+        targets: [Attributes.ATTEMPTS],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.max_attempts = 12;
+            Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
+        
+        }
+    }),
+
 ]
