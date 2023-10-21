@@ -13,7 +13,7 @@ export const BuffMarket = [
         name: "Benção do Trapaceiro",
         price: 150,
         rarity: Rarity.NORMAL,
-        description: "Ao iniciar o jogo, te direi se o número é maior ou menor que 500",
+        description: "Ao iniciar o jogo, te direi se o número é maior ou menor que 500.",
         targets: [Attributes.TIP_TIME, Attributes.TIP_TYPE],
 
         apply: (userId: string) => {
@@ -164,7 +164,7 @@ export const BuffMarket = [
 
     new Buff({
         name: "Sabotagem Iminente",
-        price: 240,
+        price: 160,
         rarity: Rarity.NORMAL,
         description: 'Reduz o número das tentativas para 5 e adiciona 0.3x no seu multiplicador se acertar.',
         targets: [Attributes.ATTEMPTS, Attributes.MULTIPLIER],
@@ -183,7 +183,7 @@ export const BuffMarket = [
         price: 240,
         rarity: Rarity.RARE,
         description: 'Reduz o número das tentativas para 8, mas você ganha 1.3x mais pontos se acertar.',
-        targets: [Attributes.ATTEMPTS],
+        targets: [Attributes.ATTEMPTS, Attributes.SCORE],
 
         apply: (userId: string) => {
 
@@ -196,7 +196,7 @@ export const BuffMarket = [
 
     new Buff({
         name: "As Segundas Chances",
-        price: 240,
+        price: 270,
         rarity: Rarity.RARE,
         description: 'Aumenta o número de tentativas para 12.',
         targets: [Attributes.ATTEMPTS],
@@ -205,6 +205,135 @@ export const BuffMarket = [
 
             Playing.inGame[userId].playerEngine.max_attempts = 12;
             Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
+        
+        }
+    }),
+
+    new Buff({
+        name: "O Oportunista",
+        price: 440,
+        rarity: Rarity.EPIC,
+        description: 'Aumenta o número de tentativas para 15.',
+        targets: [Attributes.ATTEMPTS],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.max_attempts = 15;
+            Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
+        
+        }
+    }),
+
+    new Buff({
+        name: "Tesoureiro à risco",
+        price: 390,
+        rarity: Rarity.EPIC,
+        description: 'Reduz o número de tentativas para 5, mas concede 3x mais pontos se você acertar.',
+        targets: [Attributes.ATTEMPTS, Attributes.SCORE],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.max_attempts = 5;
+            Playing.inGame[userId].playerEngine.score_multiplier *= 3;
+            Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
+        
+        }
+    }),
+
+    new Buff({
+        name: "Derrota segura",
+        price: 100,
+        rarity: Rarity.NORMAL,
+        description: 'Seu multiplicador não será resetado se você perder.',
+        targets: [Attributes.MULTIPLIER],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.multiplier_reset = 0;
+        
+        }
+    }),
+
+    new Buff({
+        name: "Futuro Próspero",
+        price: 100,
+        rarity: Rarity.NORMAL,
+        description: 'Se você ganhar, adiciona mais 0.3x no seu multiplicador para o dia seguinte.',
+        targets: [Attributes.MULTIPLIER],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.multiplier_gain = 0.3;
+        
+        }
+    }),
+
+    new Buff({
+        name: "Ampliador cósmico",
+        price: 300,
+        rarity: Rarity.RARE,
+        description: 'Se você ganhar, adiciona mais 0.5x no seu multiplicador para o dia seguinte.',
+        targets: [Attributes.MULTIPLIER],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.multiplier_gain = 0.5;
+        
+        }
+    }),
+
+    new Buff({
+        name: "Ampulheta dos Milênios",
+        price: 320,
+        rarity: Rarity.RARE,
+        description: 'Se você ganhar, adiciona mais 1.0x no seu multiplicador para o dia seguinte.',
+        targets: [Attributes.MULTIPLIER],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.multiplier_gain = 1.0;
+        
+        }
+    }),
+
+    new Buff({
+        name: "Ímpeto Celular",
+        price: 590,
+        rarity: Rarity.EPIC,
+        description: 'No fim da rodada, adiciona mais 1.8x no seu multiplicador para o dia seguinte.',
+        targets: [Attributes.MULTIPLIER],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.multiplier_gain = 1.8;
+        
+        }
+    }),
+
+    new Buff({
+        name: "O Ladrão",
+        price: 240,
+        rarity: Rarity.NORMAL,
+        description: 'O ladrão te dará 1.2x mais pontos ao acertar o número.',
+        targets: [Attributes.SCORE],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.score_multiplier = 1.2;
+        
+        }
+    }),
+
+    new Buff({
+        name: "",
+        price: 200,
+        rarity: Rarity.NORMAL,
+        description: 'O ladrão te dará 1.2x mais pontos ao acertar o número.',
+        targets: [Attributes.SCORE],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.score_multiplier = 1.2;
         
         }
     }),
