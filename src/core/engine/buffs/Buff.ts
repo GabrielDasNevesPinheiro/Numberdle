@@ -46,35 +46,35 @@ export default class Buff {
     }
 
     // GETTERS & SETTERS
-    public get name(): string | undefined {
+    public get name(): string {
         return this._name;
     }
 
-    private set name(value: string | undefined) {
+    private set name(value: string) {
         this._name = value;
     }
 
-    public get description(): string | undefined {
+    public get description(): string {
         return this._description;
     }
 
-    private set description(value: string | undefined) {
+    private set description(value: string) {
         this._description = value;
     }
 
-    public get rarity(): Rarity | undefined {
+    public get rarity(): Rarity {
         return this._rarity;
     }
 
-    private set rarity(value: Rarity | undefined) {
+    private set rarity(value: Rarity) {
         this._rarity = value;
     }
 
-    public get targets(): Attributes[] | undefined {
+    public get targets(): Attributes[] {
         return this._targets;
     }
 
-    private set targets(value: Attributes[] | undefined) {
+    private set targets(value: Attributes[]) {
         this._targets = value;
     }
 
