@@ -34,15 +34,14 @@ export default class Buff {
 
     }
 
-    public isCompatible(other: Buff): boolean {
+    public isCompatible(others: Buff[]): boolean {
 
-        const temp = this.targets;
-
-        temp.push(...other.targets);
-
-        let repeated = temp.filter((value, index, array) => array.indexOf(value) !== index);
-
-        return repeated.length ? false : true;
+        for (let selectedBuff of others) {
+            if (this.targets.some(target => selectedBuff.targets.includes(target))) {
+                return false;
+            }
+        }
+        return true;
 
     }
 
