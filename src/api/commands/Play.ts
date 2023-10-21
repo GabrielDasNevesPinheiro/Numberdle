@@ -53,7 +53,7 @@ export default abstract class Play extends Command {
         
         Playing.inGame[player.userId] = { attempts: 10, generatedNumber: number, playerEngine: engine }
 
-        BuffMarket[8].apply(player.userId);
+        // apply buffs here
 
         const { tip_attempt, default_tip_attempt, max_attempts } = Playing.inGame[player.userId].playerEngine;
         const { tip_message } = Playing.inGame[player.userId].playerEngine;
