@@ -163,47 +163,45 @@ export const BuffMarket = [
     }),
 
     new Buff({
-        name: "Sabotagem Iminente",
-        price: 160,
+        name: "Vantagem do Matemático",
+        price: 250,
         rarity: Rarity.NORMAL,
-        description: 'Reduz o número das tentativas para 5 e adiciona 0.3x no seu multiplicador se acertar.',
-        targets: [Attributes.ATTEMPTS, Attributes.MULTIPLIER],
+        description: 'O Matemático concede 2 tentativas extras, totalizando 12 tentativas.',
+        targets: [Attributes.ATTEMPTS],
 
         apply: (userId: string) => {
 
-            Playing.inGame[userId].playerEngine.max_attempts = 5;
-            Playing.inGame[userId].playerEngine.multiplier_gain = 0.3;
+            Playing.inGame[userId].playerEngine.max_attempts = 12;
             Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
         
         }
     }),
     
     new Buff({
-        name: "A Desvantagem da Ganância",
-        price: 240,
+        name: "Ganância do Mestre",
+        price: 320,
         rarity: Rarity.RARE,
-        description: 'Reduz o número das tentativas para 8, mas você ganha 1.3x mais pontos se acertar.',
-        targets: [Attributes.ATTEMPTS, Attributes.SCORE],
+        description: 'A Ganância permite mais 3 tentativas, totalizando 13 tentativas.',
+        targets: [Attributes.ATTEMPTS],
 
         apply: (userId: string) => {
 
-            Playing.inGame[userId].playerEngine.max_attempts = 8;
-            Playing.inGame[userId].playerEngine.score_multiplier *= 1.3;
+            Playing.inGame[userId].playerEngine.max_attempts = 13;
             Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
         
         }
     }),
 
     new Buff({
-        name: "As Segundas Chances",
+        name: "Trapaça",
         price: 270,
         rarity: Rarity.RARE,
-        description: 'Aumenta o número de tentativas para 12.',
+        description: 'Aumenta o número de tentativas para 14.',
         targets: [Attributes.ATTEMPTS],
 
         apply: (userId: string) => {
 
-            Playing.inGame[userId].playerEngine.max_attempts = 12;
+            Playing.inGame[userId].playerEngine.max_attempts = 14;
             Playing.inGame[userId].attempts = Playing.inGame[userId].playerEngine.max_attempts;
         
         }
@@ -269,7 +267,7 @@ export const BuffMarket = [
     }),
 
     new Buff({
-        name: "Ampliador cósmico",
+        name: "Ampliador Cósmico",
         price: 300,
         rarity: Rarity.RARE,
         description: 'Se você ganhar, adiciona mais 0.5x no seu multiplicador para o dia seguinte.',
@@ -325,15 +323,15 @@ export const BuffMarket = [
     }),
 
     new Buff({
-        name: "",
-        price: 200,
+        name: "O Assaltante",
+        price: 300,
         rarity: Rarity.NORMAL,
-        description: 'O ladrão te dará 1.2x mais pontos ao acertar o número.',
+        description: 'O Assaltante te dará 1.5x mais pontos ao acertar o número.',
         targets: [Attributes.SCORE],
 
         apply: (userId: string) => {
 
-            Playing.inGame[userId].playerEngine.score_multiplier = 1.2;
+            Playing.inGame[userId].playerEngine.score_multiplier = 1.5;
         
         }
     }),
