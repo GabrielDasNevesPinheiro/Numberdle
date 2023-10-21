@@ -101,11 +101,19 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     if (Playing.inGame[message.author.id].attempts == 0) {
 
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
+        let message_text = `Você já usou suas ${playerEngine.max_attempts} tentativas e o número era ${Playing.inGame[message.author.id].generatedNumber}  :( `;
 
-        message.reply(`Você já usou suas 10 tentativas e o número era ${Playing.inGame[message.author.id].generatedNumber}  :( \nBoa sorte no próximo dia :)\nSeu bônus de x${multiplier} foi resetado.`);
-
-        await setMultiplier(message.author.id, playerEngine.multiplier_reset);
+        
+        
+        if (!(playerEngine.multiplier_reset == 0)){
+            
+            await setMultiplier(message.author.id, playerEngine.multiplier_reset);
+            message_text += `\nSeu bônus de x${multiplier} foi resetado.`
+            
+        }
+        
         await setLastPlayed(message.author.id, getTodayDate());
+        message.reply(message_text);
 
         delete Playing.inGame[message.author.id];
         return;
