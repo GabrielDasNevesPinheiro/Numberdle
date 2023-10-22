@@ -50,17 +50,12 @@ export default abstract class RollStore extends Command {
         let toShuffle = BuffMarket.map((buff) => buff);
         const buffs = getBuffMarket(toShuffle);
         let indexes = BuffMarket.map((buff, index) => {
-            console.log(buff.name, index);
             
             for (let buff2 of buffs) {
                 if (buff2.name === buff.name) return index;
             }
             
         });
-
-        for(let buff of BuffMarket) {
-            console.log(buff.name, BuffMarket.indexOf(buff));
-        }
 
         indexes = indexes.filter(index => index !== undefined);
 

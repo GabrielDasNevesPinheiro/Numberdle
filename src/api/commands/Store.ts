@@ -45,7 +45,7 @@ export default abstract class Store extends Command {
         let buffs: Buff[] = [];
 
         player.store.forEach((index) => {
-            console.log(index);
+            
             buffs.push(BuffMarket[index]);
         });
 
