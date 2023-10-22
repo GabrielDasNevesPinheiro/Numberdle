@@ -10,6 +10,7 @@ class Player extends Model<InferAttributes<Player>, InferCreationAttributes<Play
     declare multiplier: number;
     declare buffs: CreationOptional<Array<number>>;
     declare store: CreationOptional<Array<number>>;
+    declare storeDate: CreationOptional<Date>;
 }
 
 Player.init({
@@ -23,6 +24,7 @@ Player.init({
     lastPlayed: {
         type: DataTypes.DATE,
         allowNull: true,
+        defaultValue: null,
     },
     score: {
         type: DataTypes.NUMBER,
@@ -39,6 +41,11 @@ Player.init({
     store: {
         type: DataTypes.JSON(),
         defaultValue: []
+    },
+    storeDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null
     }
 }, {
     sequelize,
