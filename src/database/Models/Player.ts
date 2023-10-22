@@ -7,7 +7,9 @@ class Player extends Model<InferAttributes<Player>, InferCreationAttributes<Play
     declare username: string;
     declare score: CreationOptional<number>;
     declare lastPlayed: CreationOptional<Date>;
-    declare multiplier: number
+    declare multiplier: number;
+    declare buffs: CreationOptional<number[]>;
+    declare store: CreationOptional<number[]>;
 }
 
 Player.init({
@@ -29,6 +31,14 @@ Player.init({
     multiplier: {
         type: DataTypes.FLOAT,
         defaultValue: 1.0
+    },
+    buffs: {
+        type: DataTypes.ARRAY(DataTypes.NUMBER),
+        defaultValue: []
+    },
+    store: {
+        type: DataTypes.ARRAY(DataTypes.NUMBER),
+        defaultValue: []
     }
 }, {
     sequelize,
