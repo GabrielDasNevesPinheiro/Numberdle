@@ -8,8 +8,8 @@ class Player extends Model<InferAttributes<Player>, InferCreationAttributes<Play
     declare score: CreationOptional<number>;
     declare lastPlayed: CreationOptional<Date>;
     declare multiplier: number;
-    declare buffs: CreationOptional<number[]>;
-    declare store: CreationOptional<number[]>;
+    declare buffs: CreationOptional<Array<number>>;
+    declare store: CreationOptional<Array<number>>;
 }
 
 Player.init({
@@ -33,11 +33,11 @@ Player.init({
         defaultValue: 1.0
     },
     buffs: {
-        type: DataTypes.ARRAY(DataTypes.NUMBER),
+        type: DataTypes.JSON(),
         defaultValue: []
     },
     store: {
-        type: DataTypes.ARRAY(DataTypes.NUMBER),
+        type: DataTypes.JSON(),
         defaultValue: []
     }
 }, {
