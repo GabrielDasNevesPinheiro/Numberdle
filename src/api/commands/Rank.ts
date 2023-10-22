@@ -27,7 +27,7 @@ export default abstract class Rank extends Command {
         const { value: target } = interaction.options.get("target");
         
         if (target === "global"){
-            players = (await getPlayers()).slice(0, 10);
+            players = (await getPlayers());
         }
         
         if (target === "local") {
@@ -36,7 +36,7 @@ export default abstract class Rank extends Command {
 
         let emojis = [':first_place:', ':second_place:', ':third_place:', '4', '5', '6', '7', '8', '9', '10'];
         let place = 0;
-        players.map((player) => {
+        players.slice(0,10).map((player) => {
 
             const index = players.indexOf(player);
             
