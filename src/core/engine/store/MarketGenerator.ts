@@ -44,13 +44,11 @@ function getBuffMarket(buffs: Buff[]) {
         const buff = getBuff(shuffled);
 
         if (buff.isCompatible(sorted)) {
-            console.log(`${buff.targets} MATCHES ${sorted}`);
             sorted.push(buff);
         }
 
 
         if (sorted.length == 3) {
-            console.log("DONE");
             break;
         }
     }
