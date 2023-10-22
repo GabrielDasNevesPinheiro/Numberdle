@@ -4,14 +4,8 @@ import { getPlayerById } from "../../database/Controllers/PlayerController";
 import { getBuffMarket } from "../../core/engine/store/MarketGenerator";
 import { BuffMarket } from "../../core/engine/store/BuffMarket";
 import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
-
-
-let rarities: { [key: number]: { name: string, color: number, image: string }} = {
-    
-    0: { name: "Normal", color: Colors.Green, image: "https://i.imgur.com/x3z9utF.jpg" },
-    1: { name: "Raro", color: Colors.Gold, image: "https://i.imgur.com/0J89wM4.jpg" },
-    2: { name: "Normal", color: Colors.Purple, image: "https://i.imgur.com/Wqe95Vz.jpg" }
-}
+import { rarities } from "../../core/engine/enum/Rarity";
+import { Playing } from "../../core/engine/Playing";
 
 export default abstract class RollStore extends Command {
 
@@ -23,6 +17,11 @@ export default abstract class RollStore extends Command {
 
         await interaction.deferReply({});
         await interaction.editReply({ content: "Invocando anciões..." });
+
+        if(Playing.inGame[interaction.user.id]) {
+            await interaction.editReply({ content: "Você não pode fazer isso em jogo." });
+            return;
+        }
 
         let player = await getPlayerById(interaction.user.id);
 
@@ -41,18 +40,41 @@ export default abstract class RollStore extends Command {
             }
 
         }
+        await interaction.editReply({ content: "Resetando buffs atuais..." });
 
-        const buffs = getBuffMarket(BuffMarket);
-        const indexes = buffs.map((buff) => BuffMarket.indexOf(buff));
+        if(player.buffs.length > 0) {
+            player.buffs = [];
+            await player.save();
+        }
 
+        let toShuffle = BuffMarket.map((buff) => buff);
+        const buffs = getBuffMarket(toShuffle);
+        let indexes = BuffMarket.map((buff, index) => {
+            console.log(buff.name, index);
+            
+            for (let buff2 of buffs) {
+                if (buff2.name === buff.name) return index;
+            }
+            
+        });
+
+        for(let buff of BuffMarket) {
+            console.log(buff.name, BuffMarket.indexOf(buff));
+        }
+
+        indexes = indexes.filter(index => index !== undefined);
+
+        console.log(indexes);
         player.store = indexes;
         player.storeDate = getTodayDate();
         await player.save();
 
-        let embeds = []
+        let embeds = [];
         let active = 0;
 
-        buffs.forEach((buff) => {
+        indexes.forEach((index) => {
+            let buff = BuffMarket[index];
+            
             embeds.push(new EmbedBuilder().setTitle(`${buff.name}`)
                 .setDescription(buff.description)
                 .setImage(rarities[buff.rarity].image)
