@@ -94,4 +94,8 @@ export {
     setScore,
     setLastPlayed,
     setMultiplier,
+    setPlayerBuffs,
+    setPlayerStore,
+    getPlayerBuffs,
+    getPlayerStore,
 }
