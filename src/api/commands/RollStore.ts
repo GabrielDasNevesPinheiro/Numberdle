@@ -6,6 +6,12 @@ import { BuffMarket } from "../../core/engine/store/BuffMarket";
 import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
 
 
+let rarities: { [key: number]: { name: string, color: number, image: string }} = {
+    
+    0: { name: "Normal", color: Colors.Green, image: "https://i.imgur.com/x3z9utF.jpg" },
+    1: { name: "Raro", color: Colors.Gold, image: "https://i.imgur.com/0J89wM4.jpg" },
+    2: { name: "Normal", color: Colors.Purple, image: "https://i.imgur.com/Wqe95Vz.jpg" }
+}
 
 export default abstract class RollStore extends Command {
 
@@ -25,8 +31,6 @@ export default abstract class RollStore extends Command {
             return;
         }
 
-
-
         if (player.storeDate) {
 
             if (getTimeDiff(player.storeDate) < 72) {
@@ -38,7 +42,6 @@ export default abstract class RollStore extends Command {
 
         }
 
-
         const buffs = getBuffMarket(BuffMarket);
         const indexes = buffs.map((buff) => BuffMarket.indexOf(buff));
 
@@ -49,31 +52,13 @@ export default abstract class RollStore extends Command {
         let embeds = []
         let active = 0;
 
-        const rarities = {
-            0: "Normal",
-            1: "Raro",
-            2: "Épico"
-        }
-
-        const colors = {
-            0: Colors.Green,
-            1: Colors.Gold,
-            2: Colors.Purple,
-        }
-
-        const images = {
-            0: "https://i.imgur.com/x3z9utF.jpg",
-            1: "https://i.imgur.com/0J89wM4.jpg",
-            2: "https://i.imgur.com/Wqe95Vz.jpg",
-        }
-
         buffs.forEach((buff) => {
             embeds.push(new EmbedBuilder().setTitle(`${buff.name}`)
                 .setDescription(buff.description)
-                .setImage(images[buff.rarity])
+                .setImage(rarities[buff.rarity].image)
                 .addFields({ name: "Preço", value: `${buff.price}` })
-                .setFooter({ text: `Raridade: ${rarities[buff.rarity]}` })
-                .setColor(colors[buff.rarity])
+                .setFooter({ text: `Raridade: ${rarities[buff.rarity].name}` })
+                .setColor(rarities[buff.rarity].color)
             )
         });
 
@@ -118,7 +103,7 @@ export default abstract class RollStore extends Command {
         });
 
         collector.on('end', async (confirmation) => {
-            await interaction.editReply({ content: "Cabosi", components: [] });
+            await interaction.editReply({ components: [] });
             return;
         })
 
