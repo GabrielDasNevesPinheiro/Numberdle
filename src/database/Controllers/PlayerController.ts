@@ -18,6 +18,36 @@ async function createPlayer(userId: string, score: number, username: string): Pr
 
 }
 
+async function getPlayerBuffs(userId: string) {
+    
+    const player = await Player.findOne({ where: { userId }});
+    return player?.buffs;
+
+}
+
+async function getPlayerStore(userId: string) {
+
+    const player = await Player.findOne({ where: { userId }});
+    return player?.store;
+
+}
+
+async function setPlayerBuffs(userId: string, buffs: number[]) {
+    
+    const player = await Player.findOne({ where: { userId}});
+    player.buffs = buffs;
+    await player.save();
+
+}
+
+async function setPlayerStore(userId: string, store: number[]) {
+
+    const player = await Player.findOne({ where: { userId}});
+    player.store = store;
+    await player.save();
+
+}
+
 async function getPlayers(): Promise<Player[]> {
 
     return await Player.findAll({ order: [['score', 'DESC']] });
