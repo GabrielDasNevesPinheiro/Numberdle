@@ -19,7 +19,7 @@ export default abstract class Store extends Command {
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
-        await interaction.deferReply({});
+        await interaction.deferReply({ ephemeral: true });
 
         if(Playing.inGame[interaction.user.id]) {
             await interaction.editReply({ content: "Você não pode fazer isso em jogo." });

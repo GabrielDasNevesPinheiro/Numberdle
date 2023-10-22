@@ -15,7 +15,7 @@ export default abstract class RollStore extends Command {
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
-        await interaction.deferReply({});
+        await interaction.deferReply({ ephemeral: true });
         await interaction.editReply({ content: "Invocando anciões..." });
 
         if(Playing.inGame[interaction.user.id]) {
