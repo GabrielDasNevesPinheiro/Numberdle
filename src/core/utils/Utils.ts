@@ -4,7 +4,7 @@ import { Message } from "discord.js";
 import Guild from "../../database/Models/Guild";
 import Play from "../../api/commands/Play";
 import moment from "moment";
-import { getPlayerById, setLastPlayed, setMultiplier } from "../../database/Controllers/PlayerController";
+import { getPlayerById, setLastPlayed, setMultiplier, setPlayerBuffs } from "../../database/Controllers/PlayerController";
 import { Playing } from "../engine/Playing";
 
 export function getTodayDate() {
@@ -65,6 +65,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         player.multiplier += playerEngine.multiplier_gain;
         player.multiplier = Number(player.multiplier.toFixed(1));
         await player.save();
+        await setPlayerBuffs(message.author.id, []);
 
         delete Playing.inGame[message.author.id];
         return;
@@ -113,6 +114,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         }
         
         await setLastPlayed(message.author.id, getTodayDate());
+        await setPlayerBuffs(message.author.id, []);
         message.reply(message_text);
 
         delete Playing.inGame[message.author.id];
