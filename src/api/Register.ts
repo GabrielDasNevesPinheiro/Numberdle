@@ -7,6 +7,7 @@ import NextNumber from './commands/NextNumber';
 import Play from './commands/Play';
 import PlayerScore from './commands/PlayerScore';
 import SetName from './commands/SetName';
+import RollStore from './commands/RollStore';
 
 
 config();
@@ -24,6 +25,7 @@ const commands = [
     Play.command.toJSON(),
     PlayerScore.command.toJSON(),
     SetName.command.toJSON(),
+    RollStore.command.toJSON()
 ];
 
 
