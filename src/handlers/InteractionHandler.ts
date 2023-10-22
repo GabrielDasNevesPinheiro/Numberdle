@@ -9,6 +9,7 @@ import PlayerScore from "../api/commands/PlayerScore";
 import SetName from "../api/commands/SetName";
 import Announce from "../api/commands/Announce";
 import RollStore from "../api/commands/RollStore";
+import Store from "../api/commands/Store";
 
 
 let commands: { [key: string]: typeof Command } = {
@@ -20,7 +21,8 @@ let commands: { [key: string]: typeof Command } = {
     "player": PlayerScore,
     "setname": SetName,
     "announce": Announce,
-    "rollstore": RollStore
+    "rollstore": RollStore,
+    "store": Store
 }
 
 export default function executeAction(cmdName: string, interaction: Interaction<CacheType>) {
