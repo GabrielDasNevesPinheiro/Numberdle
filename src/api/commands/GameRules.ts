@@ -28,14 +28,14 @@ export default abstract class GameRules extends Command {
                 value: "Você ganhará muitos pontos se acertar com poucas tentativas."
             },
             {
-                name: "Temos também a loja de Buffs!",
+                name: "Temos também a loja de Buffs! :fire:",
                 value: "Use /rollstore para rolar sua loja, você pode fazer isso a cada 3 dias, você ganhará 3 buffs aleatórios"
             },
         {
-            name: "Ganhe muito mais pontos com seus buffs!",
+            name: "Ganhe muito mais pontos com seus buffs! :moneybag:",
             value: "Você gasta seus pontos com buffs da loja e se você usar bem seus buffs, você ganhará muito mais pontos ainda. Use /store para comprar (caso não tenha nada na loja, use /rollstore primeiro)"
         }, {
-            name: "Tipos de Buffs",
+            name: "Tipos de Buffs :yin_yang:",
             value: "Existem Buffs Normais, Raros e Épicos. Boa sorte para conseguir os Épicos!"
         }).setColor(Colors.Red);
 
