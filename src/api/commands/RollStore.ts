@@ -59,7 +59,6 @@ export default abstract class RollStore extends Command {
 
         indexes = indexes.filter(index => index !== undefined);
 
-        console.log(indexes);
         player.store = indexes;
         player.storeDate = getTodayDate();
         await player.save();
