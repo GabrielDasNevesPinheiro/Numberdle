@@ -317,7 +317,7 @@ export const BuffMarket = [
 
         apply: (userId: string) => {
 
-            Playing.inGame[userId].playerEngine.score_multiplier = 1.2;
+            Playing.inGame[userId].playerEngine.score_multiplier *= 1.2;
         
         }
     }),
@@ -331,7 +331,7 @@ export const BuffMarket = [
 
         apply: (userId: string) => {
 
-            Playing.inGame[userId].playerEngine.score_multiplier = 1.5;
+            Playing.inGame[userId].playerEngine.score_multiplier *= 1.5;
         
         }
     }),
