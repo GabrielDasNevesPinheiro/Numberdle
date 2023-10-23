@@ -8,6 +8,8 @@ import { BuffMarket } from "../../core/engine/store/BuffMarket";
 export default abstract class Buffs extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
+        .addUserOption((option) => option.setName("user")
+            .setDescription("Usuário para checar buffs, se vazio você verá seus buffs"))
         .setName("buffs")
         .setDescription("Exibe os buffs de alguém")
 
@@ -15,11 +17,13 @@ export default abstract class Buffs extends Command {
 
         await interaction.deferReply({ ephemeral: true })
 
-        const buffs = await getPlayerBuffs(interaction.user.id);
+        const target = interaction.options.getUser("user") || interaction.user;
+
+        const buffs = await getPlayerBuffs(target.id);
         let embeds = [];
         let active = 0;
 
-        if(!buffs) {
+        if (!buffs) {
             await interaction.editReply({ content: "Sem buffs ativos" });
             return;
         }
@@ -53,7 +57,7 @@ export default abstract class Buffs extends Command {
 
 
         const response = await interaction.editReply({
-            content: `Estes são seus buffs ativos`,
+            content: `Buffs ativos de ${target.username}`,
             embeds: [embeds[active]],
             components: [row]
         });
