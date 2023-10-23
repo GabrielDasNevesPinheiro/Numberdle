@@ -23,7 +23,7 @@ export default abstract class Buffs extends Command {
         let embeds = [];
         let active = 0;
 
-        if (!buffs) {
+        if (!buffs || buffs?.length == 0) {
             await interaction.editReply({ content: "Sem buffs ativos" });
             return;
         }
