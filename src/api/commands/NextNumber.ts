@@ -1,6 +1,6 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
-import { getTodayDate } from "../../core/utils/Utils";
+import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
 import { getPlayerById } from "../../database/Controllers/PlayerController";
 
 export default abstract class NextNumber extends Command {
@@ -10,16 +10,18 @@ export default abstract class NextNumber extends Command {
         .setDescription("Mostra se o jogo já está disponível");
 
     static async execute(interaction: CommandInteraction<CacheType>) {
+    
+        await interaction.deferReply();
 
-        await interaction.deferReply({ ephemeral: true });
+        const player = await getPlayerById(interaction.user.id);
 
-        const user = await getPlayerById(interaction.user.id);
+        const timeDiff = getTimeDiff(player?.lastPlayed);
 
-        if((user?.lastPlayed < getTodayDate()) || !user?.lastPlayed) {
-            await interaction.editReply({ content: "Seu Numberdle de hoje está disponível"});
-        } else {
-            await interaction.editReply({ content: "Você poderá jogar só amanhã"});
+        if (!(timeDiff >= 24)) {
+            return await interaction.editReply({ content: `Você poderá jogar em ${24 - timeDiff} horas` });
         }
+        
+        await interaction.editReply({ content: "Você já pode jogar"});
 
     }
 
