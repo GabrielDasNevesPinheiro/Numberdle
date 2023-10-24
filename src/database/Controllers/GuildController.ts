@@ -46,10 +46,16 @@ async function addGuildPlayer(guildId: string, userId: string) {
 
 async function createGuild(defaultChannel: string, guildId: string) {
 
-    await Guild.create({
-        defaultChannel,
-        guildId
-    });
+    const guild = await getGuildById(guildId);
+
+    if(!guild) {
+        
+        await Guild.create({
+            defaultChannel,
+            guildId
+        });
+
+    }
 
 }
 
