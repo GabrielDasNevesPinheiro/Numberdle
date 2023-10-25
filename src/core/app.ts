@@ -63,6 +63,10 @@ client.on('guildCreate', async (guild) => {
 client.on('interactionCreate', async (interaction) => {
 
     if (!interaction.isChatInputCommand()) return;
+    if (interaction.channel.isDMBased()) {
+        interaction.reply("?");
+        return;
+    }
 
     executeAction(interaction.commandName, interaction);
 
