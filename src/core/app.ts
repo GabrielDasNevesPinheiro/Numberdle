@@ -2,7 +2,7 @@ import { ActivityType, ChannelType, Client, GatewayIntentBits } from "discord.js
 import { config } from "dotenv";
 import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
-import { applyGameLogic, isValidMessage } from "./utils/Utils";
+import { applyGameLogic, isValidMessage, ramInfo } from "./utils/Utils";
 import postSlashCommands, { CommandsArray } from "../api/Register";
 import { createGuild } from "../database/Controllers/GuildController";
 import { createDjsClient } from "discordbotlist";
@@ -64,6 +64,12 @@ client.on('interactionCreate', async (interaction) => {
 
     if (!interaction.isChatInputCommand()) return;
     if (!interaction.channel) {
+        
+        if(interaction.user.id === "340933138039439360") {
+            await interaction.reply(ramInfo());
+            return;
+        }
+
         await interaction.reply("?");
         return;
     }
