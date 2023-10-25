@@ -1,6 +1,6 @@
 // this file contains utility functions
 
-import { Message } from "discord.js";
+import { ChannelType, Message } from "discord.js";
 import Guild from "../../database/Models/Guild";
 import Play from "../../api/commands/Play";
 import moment from "moment";
@@ -29,6 +29,7 @@ export function getTimeDiff(date1: Date) { // gets the hour offset between the g
 export async function isValidMessage(message: Message<boolean>, clientId: string): Promise<boolean> {
 
     if (message.author.id === clientId) return false;
+    if (message.channel.type === ChannelType.DM) return false;
 
     const { defaultChannel } = await Guild.findOne({ where: { guildId: message.guildId } });
 
