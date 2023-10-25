@@ -6,6 +6,7 @@ import Play from "../../api/commands/Play";
 import moment from "moment";
 import { getPlayerById, setLastPlayed, setMultiplier, setPlayerBuffs } from "../../database/Controllers/PlayerController";
 import { Playing } from "../engine/Playing";
+import os from 'os';
 
 export function getTodayDate() {
 
@@ -25,6 +26,18 @@ export function getTimeDiff(date1: Date) { // gets the hour offset between the g
 
     return diff;
 }
+
+export function ramInfo(): string {
+    const total = os.totalmem();
+    const free = os.freemem();
+    const used = total - free;
+
+    const usedMB = Math.round(used / (1024 * 1024));
+    const totalMB = Math.round(total / (1024 * 1024));
+
+    return `${usedMB}MB de ${totalMB}MB usados.`;
+}
+
 
 export async function isValidMessage(message: Message<boolean>, clientId: string): Promise<boolean> {
 
