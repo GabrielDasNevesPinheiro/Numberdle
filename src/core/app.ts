@@ -64,7 +64,7 @@ client.on('interactionCreate', async (interaction) => {
 
     if (!interaction.isChatInputCommand()) return;
     if (interaction.channel.isDMBased()) {
-        interaction.reply("?");
+        await interaction.reply("?");
         return;
     }
 
