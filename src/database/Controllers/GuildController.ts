@@ -16,7 +16,7 @@ async function getGuildDefaultChannel(guildId: string): Promise<string> {
 
     const guild = await getGuildById(guildId);
 
-    return guild.defaultChannel;
+    return guild?.defaultChannel;
 
 }
 
