@@ -27,7 +27,8 @@ export default abstract class Announce extends Command {
 
             const channel = guild.channels.cache.get(defaultChannel) as TextChannel;
 
-            await channel.send(`:warning: AVISO IMPORTANTE :warning: \n${announce}`);
+            if(channel)
+                await channel.send(`:warning: AVISO IMPORTANTE :warning: \n${announce}`);
 
         });
 
