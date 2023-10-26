@@ -44,7 +44,7 @@ export async function isValidMessage(message: Message<boolean>, clientId: string
     if (message.author.id === clientId) return false;
     if (message.channel.type === ChannelType.DM) return false;
 
-    const { defaultChannel } = await Guild.findOne({ where: { guildId: message.guildId } });
+    const defaultChannel = (await Guild.findOne({ where: { guildId: message.guildId } }))?.defaultChannel;
 
     if (message.channelId !== defaultChannel) return false; // dont answer if is not Numberdle's channel
 
