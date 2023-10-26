@@ -336,4 +336,18 @@ export const BuffMarket = [
         }
     }),
 
+    new Buff({
+        name: "Banqueiro Santo Ander",
+        price: 800,
+        rarity: Rarity.EPIC,
+        description: 'Aumenta em 3x os seus ganhos',
+        targets: [Attributes.SCORE],
+
+        apply: (userId: string) => {
+
+            Playing.inGame[userId].playerEngine.score_multiplier *= 3;
+        
+        }
+    }),
+
 ]
