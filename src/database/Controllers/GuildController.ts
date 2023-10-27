@@ -12,6 +12,32 @@ async function getGuildById(guildId: string): Promise<Guild> {
 
 }
 
+async function getGuildRanking(): Promise<{ guildId: string, score: number }[]> {
+
+    let data: { guildId: string, score: number }[] = [];
+
+    const guilds = await Guild.findAll();
+
+    data = await Promise.all(guilds.map(async (guild) => {
+
+        let score = 0;
+
+        for (let userId of guild.players) {
+
+            const player = await getPlayerById(userId);
+            score += player.score;
+
+        }
+
+        return {
+            guildId: guild.guildId,
+            score
+        };
+    }));
+
+    return data;
+}
+
 async function getGuildDefaultChannel(guildId: string): Promise<string> {
 
     const guild = await getGuildById(guildId);
@@ -38,7 +64,7 @@ async function getGuildPlayers(guildId: string): Promise<Player[]> {
 }
 
 async function addGuildPlayer(guildId: string, userId: string) {
-    
+
     let guild = await getGuildById(guildId);
     guild.players = [...guild.players, userId];
     await guild.save();
@@ -48,8 +74,8 @@ async function createGuild(defaultChannel: string, guildId: string) {
 
     const guild = await getGuildById(guildId);
 
-    if(!guild) {
-        
+    if (!guild) {
+
         await Guild.create({
             defaultChannel,
             guildId
@@ -73,5 +99,6 @@ export {
     getGuildDefaultChannel,
     addGuildPlayer,
     createGuild,
-    setDefaultChannel
+    setDefaultChannel,
+    getGuildRanking
 }
