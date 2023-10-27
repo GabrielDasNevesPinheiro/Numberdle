@@ -72,7 +72,6 @@ export default abstract class Rank extends Command {
                 const {guildId, score} = guildRank;         
                 
                 let name = interaction.client.guilds.cache.get(guildId)?.name;
-                console.log(name, guildId, guildRanking.indexOf({guildId, score}));
                 if(!name) return;
 
                 
