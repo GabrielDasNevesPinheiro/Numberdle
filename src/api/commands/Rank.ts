@@ -21,7 +21,7 @@ export default abstract class Rank extends Command {
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
-        const embed = new EmbedBuilder().setTitle(":trophy: Melhores jogadores :trophy:").setColor(Colors.Red);
+        let embed = new EmbedBuilder().setTitle(":trophy: Melhores jogadores :trophy:").setColor(Colors.Red);
 
         let players: Player[] = [];
         let guildRanking: { guildId: string, score: number }[] = [];
@@ -39,9 +39,8 @@ export default abstract class Rank extends Command {
         if (target === "servers") {
             
             guildRanking = await getGuildRanking();
-
             guildRanking.sort((first, sec) => first.score > sec.score ? -1 : 1);
-            console.log(guildRanking);
+            embed = embed.setTitle(":trophy: Melhores Servidores :trophy:")
             
         
         }
@@ -82,7 +81,7 @@ export default abstract class Rank extends Command {
                 if(guildId === interaction.guildId) place = index + 1;
 
                 embed.addFields([
-                    { name: `${emoji} - ${name}`, value: `${score} Pontos` }
+                    { name: `${emoji} - ${name}`, value: `${score.toLocaleString("pt-BR")} Pontos` }
                 ]);
                 
             });
