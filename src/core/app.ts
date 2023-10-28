@@ -50,8 +50,6 @@ client.on('ready', async () => {
 
     console.log(`Running... ${client.user?.tag}`);
 
-    console.log(`Running... ${client.user?.tag}`);
-
 });
 
 client.on('guildCreate', async (guild) => {
