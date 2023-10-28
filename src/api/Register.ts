@@ -10,6 +10,7 @@ import SetName from './commands/SetName';
 import RollStore from './commands/RollStore';
 import Store from './commands/Store';
 import Buffs from './commands/Buffs';
+import AllBuffs from './commands/AllBuffs';
 
 
 config();
@@ -29,7 +30,8 @@ const commands = [
     SetName.command.toJSON(),
     RollStore.command.toJSON(),
     Store.command.toJSON(),
-    Buffs.command.toJSON()
+    Buffs.command.toJSON(),
+    AllBuffs.command.toJSON()
 ];
 
 

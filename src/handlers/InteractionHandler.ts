@@ -11,6 +11,7 @@ import Announce from "../api/commands/Announce";
 import RollStore from "../api/commands/RollStore";
 import Store from "../api/commands/Store";
 import Buffs from "../api/commands/Buffs";
+import AllBuffs from "../api/commands/AllBuffs";
 
 
 let commands: { [key: string]: typeof Command } = {
@@ -25,6 +26,7 @@ let commands: { [key: string]: typeof Command } = {
     "rollstore": RollStore,
     "store": Store,
     "buffs": Buffs,
+    "allbuffs": AllBuffs,
 }
 
 export default function executeAction(cmdName: string, interaction: Interaction<CacheType>) {
