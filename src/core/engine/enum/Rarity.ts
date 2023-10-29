@@ -12,5 +12,5 @@ export const rarities: { [key: number]: { name: string, color: number, image: st
     
     0: { name: "Normal", color: Colors.Green, image: "https://i.imgur.com/x3z9utF.jpg" },
     1: { name: "Raro", color: Colors.Gold, image: "https://i.imgur.com/0J89wM4.jpg" },
-    2: { name: "Normal", color: Colors.Purple, image: "https://i.imgur.com/Wqe95Vz.jpg" }
+    2: { name: "Épico", color: Colors.Purple, image: "https://i.imgur.com/Wqe95Vz.jpg" }
 }
