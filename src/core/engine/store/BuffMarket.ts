@@ -338,7 +338,7 @@ export const BuffMarket = [
 
     new Buff({
         name: "Banqueiro Santo Ander",
-        price: 800,
+        price: 450,
         rarity: Rarity.EPIC,
         description: 'Aumenta em 3x os seus ganhos',
         targets: [Attributes.SCORE],
