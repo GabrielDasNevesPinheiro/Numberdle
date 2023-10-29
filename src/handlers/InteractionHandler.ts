@@ -14,7 +14,7 @@ import Buffs from "../api/commands/Buffs";
 import AllBuffs from "../api/commands/AllBuffs";
 
 
-let commands: { [key: string]: typeof Command } = {
+export const commands: { [key: string]: typeof Command } = {
     "gamerules": GameRules,
     "nextnumber": NextNumber,
     "rank": Rank,
