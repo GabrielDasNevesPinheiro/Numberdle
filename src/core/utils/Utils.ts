@@ -68,6 +68,11 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         const player = await getPlayerById(message.author.id);
 
+        if(playerEngine.roleplay) {
+            message.reply("Você acertou! Parabéns.");
+            delete Playing.inGame[player.userId];
+            return;
+        }
 
         const scoreEarned = Math.floor((playerEngine.score_multiplier * Playing.inGame[message.author.id].attempts) * player.multiplier);
         player.score += scoreEarned;
@@ -104,7 +109,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
             }));
 
     }
-    
+
     if (Playing.inGame[message.author.id].attempts == playerEngine.tip_attempt) {
 
         if (Playing.inGame[message.author.id].playerEngine.tip_message) {
@@ -112,28 +117,32 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         }
 
     }
-
+    console.log(Playing.inGame[message.author.id].generatedNumber);
     if (Playing.inGame[message.author.id].attempts == 0) {
 
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
         let message_text = `Você já usou suas ${playerEngine.max_attempts} tentativas e o número era ${Playing.inGame[message.author.id].generatedNumber}  :( `;
 
-        
-        
-        if (!(playerEngine.multiplier_reset == 0)){
-            
-            await setMultiplier(message.author.id, playerEngine.multiplier_reset);
-            message_text += `\nSeu bônus de x${multiplier} foi resetado.`
+        if (!playerEngine.roleplay) {
+
+            if (!(playerEngine.multiplier_reset == 0)) {
+
+                await setMultiplier(message.author.id, playerEngine.multiplier_reset);
+                message_text += `\nSeu bônus de x${multiplier} foi resetado.`
+
+            }
+
+            await setLastPlayed(message.author.id, getTodayDate());
+            await setPlayerBuffs(message.author.id, []);
             
         }
         
-        await setLastPlayed(message.author.id, getTodayDate());
-        await setPlayerBuffs(message.author.id, []);
         message.reply(message_text);
-
         delete Playing.inGame[message.author.id];
         return;
+
     }
+
 }
 
 export function isPrime(num: number): boolean {

@@ -3,6 +3,7 @@ export default class GameEngine {
 
 
     public score_multiplier = 100;
+    public roleplay = false;
     public multiplier_gain = 0.1;
     public multiplier_reset = 1.0;
     public max_attempts = 10;

@@ -41,17 +41,18 @@ export default abstract class Play extends Command {
 
         const timeDiff = getTimeDiff(player?.lastPlayed);
 
+        const engine = new GameEngine();
+        const number = engine.generateNumberdle();
+        Playing.inGame[player.userId] = { attempts: 10, generatedNumber: number, playerEngine: engine };
+
+
+
         if (!(timeDiff >= 24)) {
-            return await interaction.editReply({ content: `Você poderá jogar em ${24 - timeDiff} horas` });
+            await interaction.editReply({ content: `Você poderá jogar valendo pontos em ${24 - timeDiff} horas` });
+            Playing.inGame[player.userId].playerEngine.roleplay = true;
         }
         
         await interaction.editReply({ content: "Hmmmmm" });
-
-        const engine = new GameEngine();
-        
-        const number = engine.generateNumberdle();
-        
-        Playing.inGame[player.userId] = { attempts: 10, generatedNumber: number, playerEngine: engine }
 
         // apply buffs here
         player.buffs.forEach((index) => {
@@ -60,7 +61,14 @@ export default abstract class Play extends Command {
 
         const { tip_attempt, default_tip_attempt, max_attempts } = Playing.inGame[player.userId].playerEngine;
         const { tip_message } = Playing.inGame[player.userId].playerEngine;
-        await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Playing.inGame[player.userId].attempts} chances! ${ tip_attempt == max_attempts || default_tip_attempt == max_attempts ? tip_message : ""}` });
+
+        let aditional = "";
+
+        if(Playing.inGame[player.userId].playerEngine.roleplay) {
+            aditional += `Seu jogo valerá pontos em ${24 - timeDiff} horas.`;
+        }
+
+        await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Playing.inGame[player.userId].attempts} chances! ${ tip_attempt == max_attempts || default_tip_attempt == max_attempts ? tip_message : ""} ${aditional}` });
 
     }
 }
