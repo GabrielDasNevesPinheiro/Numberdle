@@ -2,7 +2,6 @@ import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from 'd
 import { config } from 'dotenv';
 import { commands as cmdList } from '../handlers/InteractionHandler';
 
-
 config();
 
 const token = process.env.TOKEN as string;
