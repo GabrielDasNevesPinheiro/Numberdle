@@ -117,7 +117,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         }
 
     }
-    console.log(Playing.inGame[message.author.id].generatedNumber);
+    
     if (Playing.inGame[message.author.id].attempts == 0) {
 
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
