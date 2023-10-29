@@ -350,4 +350,112 @@ export const BuffMarket = [
         }
     }),
 
+    new Buff({
+        name: "O Improvável",
+        price: 200,
+        rarity: Rarity.NORMAL,
+        description: 'Adiciona 45% de chance do seu número gerado estar entre 700 e 800',
+        targets: [Attributes.GENERATED_NUMBER],
+
+        apply: (userId: string) => {
+
+            const prob = Math.random();
+
+            if (prob <= 0.45) {
+                Playing.inGame[userId].generatedNumber = Math.floor(Math.random() * 101) + 700;
+            } 
+        
+        }
+    }),
+
+    new Buff({
+        name: "O Quase Improvável",
+        price: 220,
+        rarity: Rarity.NORMAL,
+        description: 'Adiciona 55% de chance do seu número gerado estar entre 300 e 400',
+        targets: [Attributes.GENERATED_NUMBER],
+
+        apply: (userId: string) => {
+
+            const prob = Math.random();
+
+            if (prob <= 0.55) {
+                Playing.inGame[userId].generatedNumber = Math.floor(Math.random() * 101) + 300;
+            }
+        
+        }
+    }),
+
+    new Buff({
+        name: "O Provável",
+        price: 250,
+        rarity: Rarity.RARE,
+        description: 'Adiciona 65% de chance do seu número gerado estar entre 900 e 1000',
+        targets: [Attributes.GENERATED_NUMBER],
+
+        apply: (userId: string) => {
+
+            const prob = Math.random();
+
+            if (prob <= 0.65) {
+                Playing.inGame[userId].generatedNumber = Math.floor(Math.random() * 101) + 900;
+            }
+        
+        }
+    }),
+
+    new Buff({
+        name: "O Bem mais Provável",
+        price: 300,
+        rarity: Rarity.RARE,
+        description: 'Adiciona 70% de chance do seu número gerado estar entre 100 e 200',
+        targets: [Attributes.GENERATED_NUMBER],
+
+        apply: (userId: string) => {
+
+            const prob = Math.random();
+
+            if (prob <= 0.70) {
+                Playing.inGame[userId].generatedNumber = Math.floor(Math.random() * 101) + 100;
+            }
+        
+        }
+    }),
+
+    new Buff({
+        name: "O Muito Provável",
+        price: 400,
+        rarity: Rarity.EPIC,
+        description: 'Adiciona 80% de chance do seu número gerado estar entre 200 e 300',
+        targets: [Attributes.GENERATED_NUMBER],
+
+        apply: (userId: string) => {
+
+            const prob = Math.random();
+
+            if (prob <= 0.80) {
+                Playing.inGame[userId].generatedNumber = Math.floor(Math.random() * 101) + 200;
+            }
+        
+        }
+    }),
+
+    new Buff({
+        name: "O Pesadelo dos Azarados",
+        price: 460,
+        rarity: Rarity.EPIC,
+        description: 'Adiciona 90% de chance do seu número gerado estar entre 300 e 350',
+        targets: [Attributes.GENERATED_NUMBER],
+
+        apply: (userId: string) => {
+
+            const prob = Math.random();
+
+            if (prob <= 0.90) {
+                Playing.inGame[userId].generatedNumber = Math.floor(Math.random() * 50) + 300;
+            }
+        
+        }
+    }),
+
 ]
