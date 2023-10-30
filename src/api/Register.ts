@@ -12,7 +12,9 @@ const rest = new REST({ version: '10' }).setToken(token);
 let commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
 for (let cmd in cmdList) {
-    commands.push(cmdList[cmd].command.toJSON());
+
+    if(cmd !== "announce")
+        commands.push(cmdList[cmd].command.toJSON());
 }
 
 
