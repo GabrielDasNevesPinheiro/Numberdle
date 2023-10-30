@@ -49,7 +49,7 @@ export default abstract class Store extends Command {
             buffs.push(BuffMarket[index]);
         });
 
-        let embeds = [];
+        let embeds: EmbedBuilder[] = [];
         let active = 0;
 
         buffs.forEach((buff) => {
@@ -101,6 +101,7 @@ export default abstract class Store extends Command {
             if (confirmation.customId === "previous") {
                 active -= active > 0 ? 1 : 0;
             }
+
             if (confirmation.customId === "buy") {
                 
                 const bought = player.store.splice(active, 1);
