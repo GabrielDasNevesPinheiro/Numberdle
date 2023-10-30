@@ -18,10 +18,10 @@ export default abstract class NextNumber extends Command {
         const timeDiff = getTimeDiff(player?.lastPlayed);
 
         if (!(timeDiff >= 24)) {
-            return await interaction.editReply({ content: `Você poderá jogar em ${24 - timeDiff} horas` });
+            return await interaction.editReply({ content: `Seu jogo valerá pontos em ${24 - timeDiff} horas` });
         }
         
-        await interaction.editReply({ content: "Você já pode jogar"});
+        await interaction.editReply({ content: "Seu jogo valendo pontos já está disponível" });
 
     }
 
