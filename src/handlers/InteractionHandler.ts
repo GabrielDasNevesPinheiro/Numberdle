@@ -12,6 +12,7 @@ import RollStore from "../api/commands/RollStore";
 import Store from "../api/commands/Store";
 import Buffs from "../api/commands/Buffs";
 import AllBuffs from "../api/commands/AllBuffs";
+import Invite from "../api/commands/Invite";
 
 
 export const commands: { [key: string]: typeof Command } = {
@@ -27,6 +28,7 @@ export const commands: { [key: string]: typeof Command } = {
     "store": Store,
     "buffs": Buffs,
     "allbuffs": AllBuffs,
+    "invite": Invite
 }
 
 export default function executeAction(cmdName: string, interaction: Interaction<CacheType>) {
