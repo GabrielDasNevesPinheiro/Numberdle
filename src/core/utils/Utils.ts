@@ -2,7 +2,6 @@
 
 import { ChannelType, Message } from "discord.js";
 import Guild from "../../database/Models/Guild";
-import Play from "../../api/commands/Play";
 import moment from "moment";
 import { getPlayerById, setLastPlayed, setMultiplier, setPlayerBuffs } from "../../database/Controllers/PlayerController";
 import { Playing } from "../engine/Playing";
@@ -68,7 +67,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         const player = await getPlayerById(message.author.id);
 
-        if(playerEngine.roleplay) {
+        if (playerEngine.roleplay) {
             message.reply("Você acertou! Parabéns.");
             delete Playing.inGame[player.userId];
             return;
@@ -117,7 +116,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         }
 
     }
-    
+
     if (Playing.inGame[message.author.id].attempts == 0) {
 
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
@@ -134,9 +133,9 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
             await setLastPlayed(message.author.id, getTodayDate());
             await setPlayerBuffs(message.author.id, []);
-            
+
         }
-        
+
         message.reply(message_text);
         delete Playing.inGame[message.author.id];
         return;
@@ -168,3 +167,4 @@ export function isPrime(num: number): boolean {
 
     return true;
 }
+
