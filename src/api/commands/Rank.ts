@@ -143,7 +143,7 @@ export default abstract class Rank extends Command {
 
             guildRanking.slice((5 * page) - 5, 5 * page).forEach((guild) => {
 
-                const guildName = interaction.client.guilds.cache.get(guild.guildId).name;
+                const guildName = interaction.client.guilds.cache.get(guild.guildId)?.name || "Server desconhecido";
                 const index = guildRanking.indexOf(guild) + 1;
 
                 embed.addFields({
@@ -173,7 +173,7 @@ export default abstract class Rank extends Command {
 
                 guildRanking.slice((5 * page) - 5, 5 * page).forEach((guild) => {
 
-                    const guildName = interaction.client.guilds.cache.get(guild.guildId).name;
+                    const guildName = interaction.client.guilds.cache.get(guild.guildId)?.name || "Server desconhecido";
                     const index = guildRanking.indexOf(guild) + 1;
 
                     embed.addFields({
