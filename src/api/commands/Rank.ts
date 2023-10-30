@@ -1,7 +1,7 @@
-import { CacheType, Colors, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CacheType, Colors, CommandInteraction, ComponentType, Embed, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
 import Player from "../../database/Models/Player";
-import { getPlayers } from "../../database/Controllers/PlayerController";
+import { getPlayerById, getPlayers } from "../../database/Controllers/PlayerController";
 import { getGuildPlayers, getGuildRanking } from "../../database/Controllers/GuildController";
 
 export default abstract class Rank extends Command {
@@ -21,76 +21,186 @@ export default abstract class Rank extends Command {
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
-        let embed = new EmbedBuilder().setTitle(":trophy: Melhores jogadores :trophy:").setColor(Colors.Red);
+
+        await interaction.deferReply({});
 
         let players: Player[] = [];
         let guildRanking: { guildId: string, score: number }[] = [];
-        
+
         const { value: target } = interaction.options.get("target");
-        
-        if (target === "global"){
+
+        if (target === "global") {
             players = (await getPlayers());
         }
-        
+
         if (target === "local") {
             players = await getGuildPlayers(interaction.guildId);
         }
 
         if (target === "servers") {
-            
+
             guildRanking = await getGuildRanking();
             guildRanking.sort((first, sec) => first.score > sec.score ? -1 : 1);
-            embed = embed.setTitle(":trophy: Melhores Servidores :trophy:")
-            
-        
+
         }
 
-        let emojis = [':first_place:', ':second_place:', ':third_place:', '4', '5', '6', '7', '8', '9', '10'];
+        let page = 1;
+
+        let prev = new ButtonBuilder()
+            .setCustomId("previous")
+            .setLabel("Anterior")
+            .setStyle(ButtonStyle.Primary)
+            .setDisabled(true)
+
+        let next = new ButtonBuilder()
+            .setCustomId("next")
+            .setLabel("Próximo")
+            .setStyle(ButtonStyle.Primary)
+            .setDisabled(false)
+
+        let row = new ActionRowBuilder<ButtonBuilder>().addComponents(prev, next);
 
         if (!(target === "servers")) {
 
+            let embed = new EmbedBuilder().setTitle(":trophy: Ranking de Servidores :trophy:").setColor(Colors.Red)
+                .setThumbnail(interaction.guild.iconURL({ size: 256 }))
+
             let place = 0;
-            players.slice(0,10).map((player, index) => {
-                
-                if(player.userId === interaction.user.id) place = index + 1;
-    
-                let emoji = emojis[index];
-    
-                embed.addFields([
-                    { name: `${emoji} - ${player.username}`, value: `${player.score} Pontos` }
-                ]);
+
+            players.forEach((player, index) => {
+
+                if (player.userId === interaction.user.id) {
+                    place = index + 1;
+                }
+
             });
 
-            await interaction.reply({ embeds: [embed], content: `Você está em ${place}° lugar no ranking <@${interaction.user.id}>`, ephemeral: false });
-        
+            players.slice((5 * page) - 5, 5 * page).forEach((player) => {
+
+
+                const index = players.indexOf(player) + 1;
+
+
+
+                embed.addFields({
+                    name: `${index} - ${player.username}`, value: `${player.score}`
+                });
+            });
+
+            let response = await interaction.editReply({ embeds: [embed], components: [row], content: `Você está em ${place}° lugar no ranking <@${interaction.user.id}>` });
+
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 170000 });
+
+            collector.on("collect", async (confirmation) => {
+
+                let embed = new EmbedBuilder().setTitle(":trophy: Melhores jogadores :trophy:").setColor(Colors.Red)
+                    .setThumbnail(interaction.guild.iconURL({ size: 256 }))
+
+                if (confirmation.customId === "previous") {
+                    page -= 1;
+                }
+
+                if (confirmation.customId === "next") {
+                    page += 1;
+                }
+
+                prev.setDisabled(page == 1);
+                next.setDisabled(players.length < page * 5);
+
+                players.slice((5 * page) - 5, 5 * page).forEach((player) => {
+
+                    const index = players.indexOf(player) + 1;
+
+                    embed.addFields({
+                        name: `${index}° ${player.username}`, value: `${player.score}`
+                    });
+
+                })
+
+                if (players.length < page * 5) {
+                    embed.setDescription("Sem mais jogadores.");
+                }
+
+                await interaction.editReply({ components: [row], embeds: [embed] });
+                await confirmation.update({ embeds: [embed], components: [row] });
+
+            });
+
+
         } else {
 
+            let embed = new EmbedBuilder().setTitle(":trophy: Melhores jogadores :trophy:").setColor(Colors.Red)
+                .setThumbnail(interaction.guild.iconURL({ size: 256 }))
             let place = 0;
 
-            guildRanking.forEach((guildRank, index) => {      
-                
-                const {guildId, score} = guildRank;         
-                
-                let name = interaction.client.guilds.cache.get(guildId)?.name;
-                if(!name) return;
+            guildRanking.forEach((guild, index) => {
 
-                
-                let emoji = emojis[index];
+                if (guild.guildId === interaction.guildId) {
+                    place = index + 1;
+                }
 
-                if(guildId === interaction.guildId) place = index + 1;
-
-                embed.addFields([
-                    { name: `${emoji} - ${name}`, value: `${score.toLocaleString("pt-BR")} Pontos` }
-                ]);
-                
             });
 
-            await interaction.reply({ embeds: [embed], content: `Este server está em ${place}° lugar no ranking <@${interaction.user.id}>`, ephemeral: false });
-            
+            guildRanking.slice((5 * page) - 5, 5 * page).forEach((guild) => {
+
+                const guildName = interaction.client.guilds.cache.get(guild.guildId)?.name || "Não estou no server";
+                const index = guildRanking.indexOf(guild) + 1;
+
+                embed.addFields({
+                    name: `${index} - ${guildName}`, value: `${guild.score}`
+                });
+            });
+
+            let response = await interaction.editReply({ embeds: [embed], components: [row], content: `Este server está em ${place}° lugar no ranking <@${interaction.user.id}>` });
+
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 170000 });
+
+            collector.on("collect", async (confirmation) => {
+
+                let embed = new EmbedBuilder().setTitle(":trophy: Ranking de Servidores :trophy:").setColor(Colors.Red)
+                    .setThumbnail(interaction.guild.iconURL({ size: 256 }))
+
+                if (confirmation.customId === "previous") {
+                    page -= 1;
+                }
+
+                if (confirmation.customId === "next") {
+                    page += 1;
+                }
+
+                prev.setDisabled(page == 1);
+                next.setDisabled(guildRanking.length < page * 5);
+
+                guildRanking.slice((5 * page) - 5, 5 * page).forEach((guild) => {
+
+                    const guildName = interaction.client.guilds.cache.get(guild.guildId)?.name || "Não estou no server";
+                    const index = guildRanking.indexOf(guild) + 1;
+
+                    embed.addFields({
+                        name: `${index} - ${guildName}`, value: `${guild.score}`
+                    });
+
+
+                });
+
+                if (guildRanking.length < page * 5) {
+                    embed.setDescription("Sem mais Servidores.");
+                }
+
+                await interaction.editReply({ components: [row], embeds: [embed] });
+                await confirmation.update({ embeds: [embed], components: [row] });
+
+            });
         }
 
+        //await interaction.reply({ embeds: [embed], content: `Você está em ${place}° lugar no ranking <@${interaction.user.id}>`, ephemeral: false });
+        //await interaction.reply({ embeds: [embed], content: `Este server está em ${place}° lugar no ranking <@${interaction.user.id}>`, ephemeral: false });
 
     }
 
+
+
 }
+
+
 
