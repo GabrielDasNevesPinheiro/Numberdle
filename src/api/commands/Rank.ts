@@ -62,7 +62,7 @@ export default abstract class Rank extends Command {
 
         if (!(target === "servers")) {
 
-            let embed = new EmbedBuilder().setTitle(":trophy: Ranking de Servidores :trophy:").setColor(Colors.Red)
+            let embed = new EmbedBuilder().setTitle(":trophy: Melhores Jogadores :trophy:").setColor(Colors.Red)
                 .setThumbnail(interaction.guild.iconURL({ size: 256 }))
 
             let place = 0;
@@ -129,7 +129,7 @@ export default abstract class Rank extends Command {
 
         } else {
 
-            let embed = new EmbedBuilder().setTitle(":trophy: Melhores jogadores :trophy:").setColor(Colors.Red)
+            let embed = new EmbedBuilder().setTitle(":trophy: Ranking de Servidores :trophy:").setColor(Colors.Red)
                 .setThumbnail(interaction.guild.iconURL({ size: 256 }))
             let place = 0;
 
