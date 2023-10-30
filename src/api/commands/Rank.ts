@@ -83,7 +83,7 @@ export default abstract class Rank extends Command {
 
 
                 embed.addFields({
-                    name: `${index} - ${player.username}`, value: `${player.score}`
+                    name: `${index} - ${player.username}`, value: `${player.score.toLocaleString("pt-BR")}`
                 });
             });
 
@@ -112,7 +112,7 @@ export default abstract class Rank extends Command {
                     const index = players.indexOf(player) + 1;
 
                     embed.addFields({
-                        name: `${index}° ${player.username}`, value: `${player.score}`
+                        name: `${index}° ${player.username}`, value: `${player.score.toLocaleString("pt-BR")}`
                     });
 
                 })
@@ -147,7 +147,7 @@ export default abstract class Rank extends Command {
                 const index = guildRanking.indexOf(guild) + 1;
 
                 embed.addFields({
-                    name: `${index} - ${guildName}`, value: `${guild.score}`
+                    name: `${index} - ${guildName}`, value: `${guild.score.toLocaleString("pt-BR")}`
                 });
             });
 
@@ -177,7 +177,7 @@ export default abstract class Rank extends Command {
                     const index = guildRanking.indexOf(guild) + 1;
 
                     embed.addFields({
-                        name: `${index} - ${guildName}`, value: `${guild.score}`
+                        name: `${index} - ${guildName}`, value: `${guild.score.toLocaleString("pt-BR")}`
                     });
 
 
