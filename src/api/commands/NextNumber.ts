@@ -1,6 +1,6 @@
 import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
-import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
+import { getTimeDiff } from "../../core/utils/Utils";
 import { getPlayerById } from "../../database/Controllers/PlayerController";
 
 export default abstract class NextNumber extends Command {
