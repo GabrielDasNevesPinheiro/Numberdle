@@ -17,6 +17,8 @@ export default abstract class Announce extends Command {
 
         await interaction.deferReply({});
 
+        if(!(interaction.user.id === "340933138039439360")) return;
+
         await interaction.editReply({ content: "Enviando aviso aos servidores..." })
 
         const announce = interaction.options.get("text").value as string;
