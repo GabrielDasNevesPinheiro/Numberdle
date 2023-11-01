@@ -1,4 +1,4 @@
-import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
+import { CacheType, Colors, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
 import { getPlayerById } from "../../database/Controllers/PlayerController";
 
@@ -24,8 +24,17 @@ export default abstract class PlayerScore extends Command {
             return;
         }
 
-        await interaction.editReply({ content: `${player.username} tem ${player.score} pontos e está ganhando x${player.multiplier} mais pontos.`});
-        
+        let embed = new EmbedBuilder().setTitle(`${player.username} :person_bouncing_ball: `)
+            .setColor(Colors.Red)
+            .setImage(user.avatarURL())
+            .addFields([{
+                name: "Pontos :moneybag:", value: `${player.score.toLocaleString("pt-BR")}`,
+            }, {
+                name: "Multiplicador :slot_machine: ", value: `${player.multiplier}x`
+            }]);
+
+        await interaction.editReply({ embeds: [embed] });
+
 
     }
 }
