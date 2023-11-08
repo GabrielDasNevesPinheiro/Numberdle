@@ -32,9 +32,9 @@ export default abstract class RollStore extends Command {
 
         if (player.storeDate) {
 
-            if (getTimeDiff(player.storeDate) < 72) {
+            if (getTimeDiff(player.storeDate) < 24) {
 
-                await interaction.editReply({ content: `Você poderá rodar a loja em ${72 - getTimeDiff(player.storeDate)} horas` });
+                await interaction.editReply({ content: `Você poderá rodar a loja em ${24 - getTimeDiff(player.storeDate)} horas` });
                 return;
 
             }
