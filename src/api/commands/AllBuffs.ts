@@ -2,6 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CacheType, CommandInterac
 import Command from "./Command";
 import { BuffMarket } from "../../core/engine/store/BuffMarket";
 import { rarities } from "../../core/engine/enum/Rarity";
+import { attributeNames } from "../../core/engine/enum/Attributes";
 
 export default abstract class AllBuffs extends Command {
 
@@ -20,10 +21,14 @@ export default abstract class AllBuffs extends Command {
 
         BuffMarket.forEach((buff, index) => {
 
+            let modifiers: string = "";
+            
+            modifiers += buff.targets.map((target) => "`" + attributeNames[target] + "`").toString().replace(",", " ");
+
             embeds.push(new EmbedBuilder().setTitle(`${buff.name}`)
                 .setDescription(buff.description)
                 .setImage(rarities[buff.rarity].image)
-                .addFields({ name: "Valor", value: `${buff.price}` })
+                .addFields([{ name: "Preço", value: `${buff.price}` }, { name: "Atributos modificados", value: modifiers }])
                 .setFooter({ text: `Raridade: ${rarities[buff.rarity].name}` })
                 .setColor(rarities[buff.rarity].color)
             )

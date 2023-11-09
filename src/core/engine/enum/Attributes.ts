@@ -9,3 +9,12 @@ export enum Attributes {
     GENERATED_NUMBER = 5,
 
 }
+
+export const attributeNames = {
+    0: "Tentativas",
+    1: "Pontuação",
+    2: "Tempo da dica",
+    3: "Tipo da dica",
+    4: "Multiplicador diário",
+    5: "Número aleatório"
+}

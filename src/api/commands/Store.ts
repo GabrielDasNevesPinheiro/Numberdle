@@ -10,6 +10,7 @@ import { rarities } from "../../core/engine/enum/Rarity";
 import sequelize from "../../database/Connection";
 import Player from "../../database/Models/Player";
 import { Playing } from "../../core/engine/Playing";
+import { attributeNames } from "../../core/engine/enum/Attributes";
 
 export default abstract class Store extends Command {
 
@@ -53,13 +54,18 @@ export default abstract class Store extends Command {
         let active = 0;
 
         buffs.forEach((buff) => {
+            let modifiers: string = "";
+            
+            modifiers += buff.targets.map((target) => "`" + attributeNames[target] + "`").toString().replace(",", " ");
+
             embeds.push(new EmbedBuilder().setTitle(`${buff.name}`)
                 .setDescription(buff.description)
                 .setImage(rarities[buff.rarity].image)
-                .addFields({ name: "Preço", value: `${buff.price}` })
+                .addFields([{ name: "Preço", value: `${buff.price}` }, { name: "Atributos modificados", value: modifiers }])
                 .setFooter({ text: `Raridade: ${rarities[buff.rarity].name}` })
                 .setColor(rarities[buff.rarity].color)
             )
+
         });
 
         let prev = new ButtonBuilder()
@@ -84,7 +90,7 @@ export default abstract class Store extends Command {
 
 
         const response = await interaction.editReply({
-            content: `Use /store para visualizar os itens da tua loja sempre que precisar`,
+            content: `# Cuidado para não comprar buffs que modificam atributos iguais!`,
             embeds: [embeds[active]],
             components: [row]
         });

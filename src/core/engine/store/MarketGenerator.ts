@@ -2,9 +2,9 @@ import Buff from "../buffs/Buff";
 
 function getBuff(buffs: Buff[]) {
     const prob = {
-        0: 70,
-        1: 20,
-        2: 10
+        0: 60,
+        1: 25,
+        2: 15
     }
 
     const cumulativeProb: number[] = [];
@@ -37,20 +37,13 @@ function getBuffMarket(buffs: Buff[]) {
 
     let sorted: Buff[] = [];
 
-    while (true) {
+    for(let i = 0; i <= 7; i++) {
 
         let shuffled = buffs.reverse().sort(() => Math.random() - 0.5);
 
         const buff = getBuff(shuffled);
 
-        if (buff.isCompatible(sorted)) {
-            sorted.push(buff);
-        }
-
-
-        if (sorted.length == 3) {
-            break;
-        }
+        sorted.push(buff);
     }
 
     return sorted;

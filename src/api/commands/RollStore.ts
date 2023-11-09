@@ -6,6 +6,7 @@ import { BuffMarket } from "../../core/engine/store/BuffMarket";
 import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
 import { rarities } from "../../core/engine/enum/Rarity";
 import { Playing } from "../../core/engine/Playing";
+import { attributeNames } from "../../core/engine/enum/Attributes";
 
 export default abstract class RollStore extends Command {
 
@@ -32,9 +33,9 @@ export default abstract class RollStore extends Command {
 
         if (player.storeDate) {
 
-            if (getTimeDiff(player.storeDate) < 24) {
+            if (getTimeDiff(player.storeDate) < 72) {
 
-                await interaction.editReply({ content: `Você poderá rodar a loja em ${24 - getTimeDiff(player.storeDate)} horas` });
+                await interaction.editReply({ content: `Você poderá rodar a loja em ${72 - getTimeDiff(player.storeDate)} horas` });
                 return;
 
             }
@@ -68,11 +69,14 @@ export default abstract class RollStore extends Command {
 
         indexes.forEach((index) => {
             let buff = BuffMarket[index];
+            let modifiers: string = "";
             
+            modifiers += buff.targets.map((target) => "`" + attributeNames[target] + "`").toString().replace(",", " ");
+
             embeds.push(new EmbedBuilder().setTitle(`${buff.name}`)
                 .setDescription(buff.description)
                 .setImage(rarities[buff.rarity].image)
-                .addFields({ name: "Preço", value: `${buff.price}` })
+                .addFields([{ name: "Preço", value: `${buff.price}` }, { name: "Atributos modificados", value: modifiers }])
                 .setFooter({ text: `Raridade: ${rarities[buff.rarity].name}` })
                 .setColor(rarities[buff.rarity].color)
             )
@@ -94,7 +98,7 @@ export default abstract class RollStore extends Command {
 
 
         const response = await interaction.editReply({
-            content: `Use /store para visualizar os itens da tua loja sempre que precisar`,
+            content: "# Use `/store` para comprar",
             embeds: [embeds[active]],
             components: [row]
         });

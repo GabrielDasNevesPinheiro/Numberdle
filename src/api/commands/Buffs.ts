@@ -3,6 +3,7 @@ import Command from "./Command";
 import { getPlayerBuffs } from "../../database/Controllers/PlayerController";
 import { rarities } from "../../core/engine/enum/Rarity";
 import { BuffMarket } from "../../core/engine/store/BuffMarket";
+import { attributeNames } from "../../core/engine/enum/Attributes";
 
 
 export default abstract class Buffs extends Command {
@@ -32,10 +33,14 @@ export default abstract class Buffs extends Command {
         buffs.forEach((index) => {
             let buff = BuffMarket[index];
 
+            let modifiers: string = "";
+            
+            modifiers += buff.targets.map((target) => "`" + attributeNames[target] + "`").toString().replace(",", " ");
+
             embeds.push(new EmbedBuilder().setTitle(`${buff.name}`)
                 .setDescription(buff.description)
                 .setImage(rarities[buff.rarity].image)
-                .addFields({ name: "Comprou por", value: `${buff.price}` })
+                .addFields([{ name: "Preço", value: `${buff.price}` }, { name: "Atributos modificados", value: modifiers }])
                 .setFooter({ text: `Raridade: ${rarities[buff.rarity].name}` })
                 .setColor(rarities[buff.rarity].color)
             )
