@@ -21,8 +21,9 @@ export default abstract class Announce extends Command {
 
         await interaction.editReply({ content: "Enviando aviso aos servidores..." })
 
-        const announce = interaction.options.get("text").value as string;
-
+        const id = interaction.options.get("text").value as string;
+        const message = interaction.channel.messages.cache.get(id)
+        
         interaction.client.guilds.cache.map(async (guild) => {
 
             const defaultChannel = await getGuildDefaultChannel(guild.id);
@@ -30,7 +31,7 @@ export default abstract class Announce extends Command {
             const channel = guild.channels.cache.get(defaultChannel) as TextChannel;
 
             if(channel)
-                await channel.send(`# AVISO IMPORTANTE :warning: \n${announce}`);
+                await channel.send(message.content);
 
         });
 
