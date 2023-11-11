@@ -67,7 +67,8 @@ export default abstract class Play extends Command {
         if(Playing.inGame[player.userId].playerEngine.roleplay) {
             aditional += `Seu jogo valerá pontos em ${24 - timeDiff} horas.`;
             setTimeout(() => {
-                delete Playing.inGame[player.userId];
+                if (Playing.inGame[player.userId])
+                    delete Playing.inGame[player.userId];
             }, 240 * 1000);
         }
 
