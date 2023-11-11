@@ -66,6 +66,9 @@ export default abstract class Play extends Command {
 
         if(Playing.inGame[player.userId].playerEngine.roleplay) {
             aditional += `Seu jogo valerá pontos em ${24 - timeDiff} horas.`;
+            setTimeout(() => {
+                delete Playing.inGame[player.userId];
+            }, 240 * 1000);
         }
 
         await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Playing.inGame[player.userId].attempts} chances! ${ tip_attempt == max_attempts || default_tip_attempt == max_attempts ? tip_message : ""} ${aditional}` });
