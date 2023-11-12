@@ -4,4 +4,5 @@ export default class GameSettings {
     static roleplayMaxTime = 240 * 1000 // ms
     static rollCooldown = 72 // hours
     static buffsPerRoll = 7
+    static nickChangeCost = 100
 }
