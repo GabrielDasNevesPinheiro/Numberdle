@@ -23,6 +23,7 @@ export const commands: { [key: string]: typeof Command } = {
     "play": Play,
     "player": PlayerScore,
     "setname": SetName,
+    "announce": Announce,
     "rollstore": RollStore,
     "store": Store,
     "buffs": Buffs,
