@@ -6,6 +6,7 @@ import { createPlayer, getPlayerById } from "../../database/Controllers/PlayerCo
 import GameEngine from "../../core/engine/GameEngine";
 import { Playing } from "../../core/engine/Playing";
 import { BuffMarket } from "../../core/engine/store/BuffMarket";
+import GameSettings from "../../core/engine/GameSettings";
 
 export default abstract class Play extends Command {
 
@@ -45,14 +46,10 @@ export default abstract class Play extends Command {
         const number = engine.generateNumberdle();
         Playing.inGame[player.userId] = { attempts: 10, generatedNumber: number, playerEngine: engine };
 
-
-
-        if (!(timeDiff >= 24)) {
-            await interaction.editReply({ content: `Você poderá jogar valendo pontos em ${24 - timeDiff} horas` });
+        if (!(timeDiff >= GameSettings.cooldown)) {
+            await interaction.editReply({ content: `Você poderá jogar valendo pontos em ${GameSettings.cooldown - timeDiff} horas` });
             Playing.inGame[player.userId].playerEngine.roleplay = true;
         }
-        
-        await interaction.editReply({ content: "Hmmmmm" });
 
         // apply buffs here
         player.buffs.forEach((index) => {
@@ -65,11 +62,11 @@ export default abstract class Play extends Command {
         let aditional = "";
 
         if(Playing.inGame[player.userId].playerEngine.roleplay) {
-            aditional += `Seu jogo valerá pontos em ${24 - timeDiff} horas.`;
+            aditional += `Seu jogo valerá pontos em ${GameSettings.cooldown - timeDiff} horas.`;
             setTimeout(() => {
                 if (Playing.inGame[player.userId])
                     delete Playing.inGame[player.userId];
-            }, 240 * 1000);
+            }, GameSettings.roleplayMaxTime);
         }
 
         await interaction.editReply({ content: `Advinhe o seu número entre 0 e 1000 em até ${Playing.inGame[player.userId].attempts} chances! ${ tip_attempt == max_attempts || default_tip_attempt == max_attempts ? tip_message : ""} ${aditional}` });
