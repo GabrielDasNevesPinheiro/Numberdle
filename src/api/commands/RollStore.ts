@@ -7,12 +7,13 @@ import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
 import { rarities } from "../../core/engine/enum/Rarity";
 import { Playing } from "../../core/engine/Playing";
 import { attributeNames } from "../../core/engine/enum/Attributes";
+import GameSettings from "../../core/engine/GameSettings";
 
 export default abstract class RollStore extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
         .setName("rollstore")
-        .setDescription("Gire a loja e ganhe 3 buffs para poder comprar");
+        .setDescription(`Gire a loja e ganhe ${GameSettings.buffsPerRoll} buffs para poder comprar`);
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
@@ -33,9 +34,9 @@ export default abstract class RollStore extends Command {
 
         if (player.storeDate) {
 
-            if (getTimeDiff(player.storeDate) < 72) {
+            if (getTimeDiff(player.storeDate) < GameSettings.rollCooldown) {
 
-                await interaction.editReply({ content: `Você poderá rodar a loja em ${72 - getTimeDiff(player.storeDate)} horas` });
+                await interaction.editReply({ content: `Você poderá rodar a loja em ${GameSettings.rollCooldown - getTimeDiff(player.storeDate)} horas` });
                 return;
 
             }
