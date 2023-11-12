@@ -2,6 +2,7 @@ import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
 import Player from "../../database/Models/Player";
 import { getPlayerById } from "../../database/Controllers/PlayerController";
+import GameSettings from "../../core/engine/GameSettings";
 
 
 
@@ -13,7 +14,7 @@ export default abstract class SetName extends Command {
                 .setDescription("Seu novo nickname")
                 .setRequired(true)
         ).setName("setname")
-        .setDescription("Use 100 dos seus pontos para trocar seu nickname no ranking");
+        .setDescription(`Use ${GameSettings.nickChangeCost} dos seus pontos para trocar seu nickname no ranking`);
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
@@ -25,16 +26,16 @@ export default abstract class SetName extends Command {
 
             const newNick = interaction.options.get("nick").value as string;
 
-            if (player.score < 100 ) {
+            if (player.score < GameSettings.nickChangeCost ) {
                 await interaction.editReply({ content: "Você não tem pontos o suficiente para isso" });
                 return;
             }
 
             player.username = newNick;
-            player.score -= 100;
+            player.score -= GameSettings.nickChangeCost;
             await player.save();
 
-            await interaction.editReply({ content: `Você usou 100 pontos e mudou seu nickname para ${newNick} :)` });
+            await interaction.editReply({ content: `Você usou ${GameSettings.nickChangeCost} pontos e mudou seu nickname para ${newNick} :)` });
         } else {
             await interaction.editReply({ content: "Cara tu nem tá no rank ainda, nem da pra mudar teu nick" });
         }
