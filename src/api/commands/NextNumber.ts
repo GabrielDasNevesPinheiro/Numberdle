@@ -2,6 +2,7 @@ import { CacheType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import Command from "./Command";
 import { getTimeDiff } from "../../core/utils/Utils";
 import { getPlayerById } from "../../database/Controllers/PlayerController";
+import GameSettings from "../../core/engine/GameSettings";
 
 export default abstract class NextNumber extends Command {
 
@@ -18,7 +19,7 @@ export default abstract class NextNumber extends Command {
         const timeDiff = getTimeDiff(player?.lastPlayed);
 
         if (!(timeDiff >= 24)) {
-            return await interaction.editReply({ content: `Seu jogo valerá pontos em ${24 - timeDiff} horas` });
+            return await interaction.editReply({ content: `Seu jogo valerá pontos em ${GameSettings.cooldown - timeDiff} horas` });
         }
         
         await interaction.editReply({ content: "Seu jogo valendo pontos já está disponível" });
