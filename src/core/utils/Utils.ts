@@ -124,6 +124,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     if (Playing.inGame[message.author.id].attempts == 0) {
 
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
+        
         let message_text = `Você já usou suas ${playerEngine.max_attempts} tentativas e o número era ${Playing.inGame[message.author.id].generatedNumber}  :( `;
 
         if (!playerEngine.roleplay) {
@@ -136,6 +137,22 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
             }
 
             await setLastPlayed(message.author.id, getTodayDate());
+
+            const player = await getPlayerById(message.author.id);
+            const userEngine = Playing.inGame[player.userId];
+
+            await Game.create({
+                date: getTodayDate(),
+                userId: player.userId,
+                attempts: userEngine.playerEngine.max_attempts - userEngine.attempts,
+                multiplier: player.multiplier,
+                score: player.score,
+                earned: 0,
+                win: false,
+                buffs: player.buffs,
+                guildId: message.guildId,
+            });
+
             await setPlayerBuffs(message.author.id, []);
 
         }
