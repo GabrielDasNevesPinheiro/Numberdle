@@ -5,7 +5,7 @@ import Guild from "../../database/Models/Guild";
 import moment from "moment";
 import { getPlayerById, setLastPlayed, setMultiplier, setPlayerBuffs } from "../../database/Controllers/PlayerController";
 import { Playing } from "../engine/Playing";
-import os from 'os';
+import Game from "../../database/Models/Game";
 
 export function getTodayDate() {
 
@@ -70,8 +70,25 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         player.multiplier += playerEngine.multiplier_gain;
         player.multiplier = Number(player.multiplier.toFixed(1));
+
+        let buffs = player.buffs;
+
         await player.save();
         await setPlayerBuffs(message.author.id, []);
+
+
+        let userEngine = Playing.inGame[player.userId];
+        let game = await Game.create({
+            date: getTodayDate(),
+            userId: player.userId,
+            attempts: userEngine.playerEngine.max_attempts - userEngine.attempts,
+            multiplier: player.multiplier,
+            score: player.score,
+            earned: scoreEarned,
+            win: true,
+            buffs,
+            guildId: message.guildId,
+        });
 
         delete Playing.inGame[message.author.id];
         return;
