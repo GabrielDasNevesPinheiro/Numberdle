@@ -62,7 +62,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
             return;
         }
 
-        const scoreEarned = Math.floor((playerEngine.score_multiplier * Playing.inGame[message.author.id].attempts) * player.multiplier);
+        const scoreEarned = Math.floor((playerEngine.score_multiplier * Playing.inGame[message.author.id].attempts == 0 ? 1 : Playing.inGame[message.author.id].attempts) * player.multiplier);
         player.score += scoreEarned;
         player.lastPlayed = getTodayDate();
 
