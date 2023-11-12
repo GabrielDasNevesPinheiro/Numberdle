@@ -1,3 +1,4 @@
+import GameSettings from "../GameSettings";
 import Buff from "../buffs/Buff";
 
 function getBuff(buffs: Buff[]) {
@@ -37,7 +38,7 @@ function getBuffMarket(buffs: Buff[]) {
 
     let sorted: Buff[] = [];
 
-    for(let i = 0; i <= 7; i++) {
+    for(let i = 0; i <= GameSettings.buffsPerRoll; i++) {
 
         let shuffled = buffs.reverse().sort(() => Math.random() - 0.5);
 
