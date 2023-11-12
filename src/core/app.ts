@@ -10,6 +10,7 @@ import { getPlayerById, getPlayers } from "../database/Controllers/PlayerControl
 import Guild from "../database/Models/Guild";
 
 config();
+const environment = process.env.ENVIRONMENT || "prod";
 
 const client = new Client({
     intents: [
@@ -32,21 +33,26 @@ client.on('ready', async () => {
         url: 'https://discord.ly/numberdle'
     });
 
-    const dbl = createDjsClient(process.env.DBL, client);
-    dbl.startPosting();
-    dbl.postBotCommands(CommandsArray);
-    dbl.startPolling();
-    dbl.on("vote", async (vote, client) => {
+    if(environment === "prod") {
+        
+        const dbl = createDjsClient(process.env.DBL, client);
+        dbl.startPosting();
+        dbl.postBotCommands(CommandsArray);
+        dbl.startPolling();
+        dbl.on("vote", async (vote, client) => {
+    
+            const player = await getPlayerById(vote.id);
+    
+            if (player) {
+                player.score += 150;
+                await player.save();
+            }
+    
+            console.log(`VOTE EVENT[${vote.username}]`);
+        });
 
-        const player = await getPlayerById(vote.id);
+    }
 
-        if (player) {
-            player.score += 150;
-            await player.save();
-        }
-
-        console.log(`VOTE EVENT[${vote.username}]`);
-    });
 
     console.log(`Running... ${client.user?.tag}`);
 
