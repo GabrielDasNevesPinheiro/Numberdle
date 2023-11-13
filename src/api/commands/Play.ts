@@ -51,10 +51,14 @@ export default abstract class Play extends Command {
             Playing.inGame[player.userId].playerEngine.roleplay = true;
         }
 
-        // apply buffs here
-        player.buffs.forEach((index) => {
-            BuffMarket[index].apply(player.userId);
-        })
+        // apply buffs here (only if is not roleplay mode)
+        if(!Playing.inGame[player.userId].playerEngine.roleplay) {
+            
+            player.buffs.forEach((index) => {
+                BuffMarket[index].apply(player.userId);
+            });
+
+        }
 
         const { tip_attempt, default_tip_attempt, max_attempts } = Playing.inGame[player.userId].playerEngine;
         const { tip_message } = Playing.inGame[player.userId].playerEngine;
