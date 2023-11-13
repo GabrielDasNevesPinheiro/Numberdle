@@ -14,6 +14,7 @@ import Buffs from "../api/commands/Buffs";
 import AllBuffs from "../api/commands/AllBuffs";
 import Invite from "../api/commands/Invite";
 import Log from "../api/commands/Log";
+import Donate from "../api/commands/Donate";
 
 
 export const commands: { [key: string]: typeof Command } = {
@@ -31,6 +32,7 @@ export const commands: { [key: string]: typeof Command } = {
     "allbuffs": AllBuffs,
     "invite": Invite,
     "log": Log,
+    "donate": Donate,
 
 }
 
