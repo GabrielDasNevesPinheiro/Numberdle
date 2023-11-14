@@ -6,7 +6,7 @@ export default abstract class Vote extends Command {
 
     static command: SlashCommandBuilder = new SlashCommandBuilder()
     .setName("vote")
-    .setDescription("Mostra o link de convite para você adicionar o bot em seu server")
+    .setDescription("Vote e ganhe pontos")
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
