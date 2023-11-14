@@ -6,6 +6,9 @@ import moment from "moment";
 import { getPlayerById, setLastPlayed, setMultiplier, setPlayerBuffs } from "../../database/Controllers/PlayerController";
 import { Playing } from "../engine/Playing";
 import Game from "../../database/Models/Game";
+import axios from "axios";
+
+
 
 export function getTodayDate() {
 
@@ -189,3 +192,13 @@ export function isPrime(num: number): boolean {
     return true;
 }
 
+
+export async function checkVoted(userId: string): Promise<{ voted: boolean }> {
+    const res: { voted: boolean } = (await axios.get(`https://top.gg/api/bots/1158185774823506020/check?userId=${userId}`, {
+        headers: {
+            "Authorization": process.env.TOPGG
+        }
+    })).data;
+    res.voted = Boolean(res.voted);
+    return res;
+}

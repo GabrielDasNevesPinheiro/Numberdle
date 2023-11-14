@@ -2,12 +2,12 @@ import { ActivityType, ChannelType, Client, GatewayIntentBits } from "discord.js
 import { config } from "dotenv";
 import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
-import { applyGameLogic, isValidMessage } from "./utils/Utils";
-import postSlashCommands, { CommandsArray } from "../api/Register";
+import { applyGameLogic, checkVoted, isValidMessage } from "./utils/Utils";
+import postSlashCommands from "../api/Register";
 import { createGuild, getGuildById } from "../database/Controllers/GuildController";
-import { createDjsClient } from "discordbotlist";
-import { getPlayerById, getPlayers } from "../database/Controllers/PlayerController";
+import { getPlayers } from "../database/Controllers/PlayerController";
 import Guild from "../database/Models/Guild";
+import { AutoPoster } from "topgg-autoposter";
 
 config();
 const environment = process.env.ENVIRONMENT || "prod";
@@ -22,7 +22,7 @@ const client = new Client({
     ]
 });
 
-client.on('ready', async () => {
+client.on('ready', async (client) => {
     await sequelize.authenticate();
     await sequelize.sync();
 
@@ -34,22 +34,16 @@ client.on('ready', async () => {
     });
 
     if(environment === "prod") {
-        
-        const dbl = createDjsClient(process.env.DBL, client);
-        dbl.startPosting();
-        dbl.postBotCommands(CommandsArray);
-        dbl.startPolling();
-        dbl.on("vote", async (vote, client) => {
-    
-            const player = await getPlayerById(vote.id);
-    
-            if (player) {
-                player.score += 150;
+        AutoPoster(process.env.TOPGG, client);
+
+        setTimeout(async() => {
+            let players = await getPlayers();
+            players.forEach(async(player) => {
+                let { voted } = await checkVoted(player.userId);
+                if (voted) player.score += 300;
                 await player.save();
-            }
-    
-            console.log(`VOTE EVENT[${vote.username}]`);
-        });
+            });
+        }, 120000);
 
     }
 
