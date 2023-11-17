@@ -7,7 +7,7 @@ function getBuff(buffs: Buff[]) {
         1: 25,
         2: 15
     }
-
+ 
     const cumulativeProb: number[] = [];
     let cumulative = 0;
 
