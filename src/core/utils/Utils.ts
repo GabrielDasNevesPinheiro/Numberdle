@@ -53,8 +53,8 @@ export async function isValidMessage(message: Message<boolean>, clientId: string
 export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
     const { playerEngine } = Playing.inGame[message.author.id];
-    Playing.inGame[message.author.id].attempts -= 1;
-
+    
+    console.log(Playing.inGame[message.author.id].generatedNumber);
     if (guess == Playing.inGame[message.author.id].generatedNumber) {
 
         const player = await getPlayerById(message.author.id);
@@ -100,10 +100,12 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
     if (guess < Playing.inGame[message.author.id].generatedNumber) {
         message.react('➕');
+        Playing.inGame[message.author.id].attempts -= 1;
     }
 
     if (guess > Playing.inGame[message.author.id].generatedNumber) {
         message.react('➖');
+        Playing.inGame[message.author.id].attempts -= 1;
     }
 
     if (Playing.inGame[message.author.id].attempts == playerEngine.default_tip_attempt) {
