@@ -98,12 +98,12 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     }
 
     if (guess < Playing.inGame[message.author.id].generatedNumber) {
-        await message.react(':arrow_double_up:');
+        await message.react('⬆️');
         Playing.inGame[message.author.id].attempts -= 1;
     }
 
     if (guess > Playing.inGame[message.author.id].generatedNumber) {
-        await message.react(':small_red_triangle_down:');
+        await message.react('🔻');
         Playing.inGame[message.author.id].attempts -= 1;
     }
 

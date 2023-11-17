@@ -1,4 +1,4 @@
-import { ActivityType, ChannelType, Client, GatewayIntentBits } from "discord.js";
+import { ActivityType, ChannelType, Client, GatewayIntentBits, Partials } from "discord.js";
 import { config } from "dotenv";
 import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
@@ -19,7 +19,7 @@ const client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMembers,
-    ]
+    ], partials: [Partials.Reaction]
 });
 
 client.on('ready', async (client) => {
