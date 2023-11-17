@@ -54,13 +54,12 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
     const { playerEngine } = Playing.inGame[message.author.id];
     
-    console.log(Playing.inGame[message.author.id].generatedNumber);
     if (guess == Playing.inGame[message.author.id].generatedNumber) {
 
         const player = await getPlayerById(message.author.id);
 
         if (playerEngine.roleplay) {
-            message.reply("Você acertou! Parabéns.");
+            await message.reply("Você acertou! Parabéns.");
             delete Playing.inGame[player.userId];
             return;
         }
@@ -70,7 +69,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         player.lastPlayed = getTodayDate();
 
 
-        message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier} de bônus)`);
+        await message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier} de bônus)`);
 
         player.multiplier += playerEngine.multiplier_gain;
         player.multiplier = Number(player.multiplier.toFixed(1));
@@ -99,19 +98,19 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     }
 
     if (guess < Playing.inGame[message.author.id].generatedNumber) {
-        message.react('➕');
+        await message.react('➕');
         Playing.inGame[message.author.id].attempts -= 1;
     }
 
     if (guess > Playing.inGame[message.author.id].generatedNumber) {
-        message.react('➖');
+        await message.react('➖');
         Playing.inGame[message.author.id].attempts -= 1;
     }
 
     if (Playing.inGame[message.author.id].attempts == playerEngine.default_tip_attempt) {
 
         if (!Playing.inGame[message.author.id].playerEngine.wrap_default_tip)
-            message.reply(playerEngine.buildTipMessage({
+            await message.reply(playerEngine.buildTipMessage({
                 attempts_left: Playing.inGame[message.author.id].attempts,
                 random_number: Playing.inGame[message.author.id].generatedNumber
             }));
@@ -121,7 +120,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     if (Playing.inGame[message.author.id].attempts == playerEngine.tip_attempt) {
 
         if (Playing.inGame[message.author.id].playerEngine.tip_message) {
-            message.reply(playerEngine.tip_message);
+            await message.reply(playerEngine.tip_message);
         }
 
     }
@@ -162,7 +161,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         }
 
-        message.reply(message_text);
+        await message.reply(message_text);
         delete Playing.inGame[message.author.id];
         return;
 
