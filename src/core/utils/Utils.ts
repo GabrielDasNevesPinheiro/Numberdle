@@ -1,6 +1,6 @@
 // this file contains utility functions
 
-import { ChannelType, Message } from "discord.js";
+import { ChannelType, Message, TextChannel } from "discord.js";
 import Guild from "../../database/Models/Guild";
 import moment from "moment";
 import { getPlayerById, setLastPlayed, setMultiplier, setPlayerBuffs } from "../../database/Controllers/PlayerController";
@@ -51,6 +51,8 @@ export async function isValidMessage(message: Message<boolean>, clientId: string
 }
 
 export async function applyGameLogic(message: Message<boolean>, guess: number) {
+    let channel = message.channel as TextChannel;
+    let author = message.author
 
     const { playerEngine } = Playing.inGame[message.author.id];
     
@@ -59,7 +61,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         const player = await getPlayerById(message.author.id);
 
         if (playerEngine.roleplay) {
-            await message.reply("Você acertou! Parabéns.");
+            await channel.send( `<@${author.id}>` + "Você acertou! Parabéns.");
             delete Playing.inGame[player.userId];
             return;
         }
@@ -69,7 +71,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         player.lastPlayed = getTodayDate();
 
 
-        await message.reply(`Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier} de bônus)`);
+        await channel.send(`<@${author.id}> Wow, Você acertou o número, era mesmo ${guess}! +${scoreEarned} Pontos (x${player.multiplier} de bônus)`);
 
         player.multiplier += playerEngine.multiplier_gain;
         player.multiplier = Number(player.multiplier.toFixed(1));
@@ -98,19 +100,23 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     }
 
     if (guess < Playing.inGame[message.author.id].generatedNumber) {
-        await message.react('⬆️');
+        let num = message.content;
+        await message.delete();
+        await channel.send(`⬆️ ${num}`);
         Playing.inGame[message.author.id].attempts -= 1;
     }
 
     if (guess > Playing.inGame[message.author.id].generatedNumber) {
-        await message.react('🔻');
+        let num = message.content;
+        await message.delete();
+        await channel.send(`🔻 ${num}`);
         Playing.inGame[message.author.id].attempts -= 1;
     }
 
     if (Playing.inGame[message.author.id].attempts == playerEngine.default_tip_attempt) {
 
         if (!Playing.inGame[message.author.id].playerEngine.wrap_default_tip)
-            await message.reply(playerEngine.buildTipMessage({
+            await channel.send(`<@${author.id}> ` + playerEngine.buildTipMessage({
                 attempts_left: Playing.inGame[message.author.id].attempts,
                 random_number: Playing.inGame[message.author.id].generatedNumber
             }));
@@ -120,7 +126,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     if (Playing.inGame[message.author.id].attempts == playerEngine.tip_attempt) {
 
         if (Playing.inGame[message.author.id].playerEngine.tip_message) {
-            await message.reply(playerEngine.tip_message);
+            await channel.send(`<@${author.id}> ` + playerEngine.tip_message);
         }
 
     }
@@ -129,7 +135,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
         
-        let message_text = `Você já usou suas ${playerEngine.max_attempts} tentativas e o número era ${Playing.inGame[message.author.id].generatedNumber}  :( `;
+        let message_text = `<@${author.id}> Você já usou suas ${playerEngine.max_attempts} tentativas e o número era ${Playing.inGame[message.author.id].generatedNumber}  :( `;
 
         if (!playerEngine.roleplay) {
 
@@ -161,7 +167,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
 
         }
 
-        await message.reply(message_text);
+        await channel.send(message_text);
         delete Playing.inGame[message.author.id];
         return;
 
