@@ -55,13 +55,13 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     let author = message.author
 
     const { playerEngine } = Playing.inGame[message.author.id];
-    
+
     if (guess == Playing.inGame[message.author.id].generatedNumber) {
 
         const player = await getPlayerById(message.author.id);
 
         if (playerEngine.roleplay) {
-            await channel.send( `<@${author.id}>` + "Você acertou! Parabéns.");
+            await channel.send(`<@${author.id}>` + "Você acertou! Parabéns.");
             delete Playing.inGame[player.userId];
             return;
         }
@@ -99,18 +99,34 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
         return;
     }
 
-    if (guess < Playing.inGame[message.author.id].generatedNumber) {
-        let num = message.content;
-        await message.delete();
-        await channel.send(`⬆️ ${num}`);
-        Playing.inGame[message.author.id].attempts -= 1;
-    }
+    if (!(message.channel as TextChannel).permissionsFor(message.client.user).has('ManageMessages')) {
 
-    if (guess > Playing.inGame[message.author.id].generatedNumber) {
-        let num = message.content;
-        await message.delete();
-        await channel.send(`🔻 ${num}`);
-        Playing.inGame[message.author.id].attempts -= 1;
+        if (guess < Playing.inGame[message.author.id].generatedNumber) {
+            let num = message.content;
+            await channel.send(`⬆️ ${num}`);
+            Playing.inGame[message.author.id].attempts -= 1;
+        }
+
+        if (guess > Playing.inGame[message.author.id].generatedNumber) {
+            let num = message.content;
+            await channel.send(`🔻 ${num}`);
+            Playing.inGame[message.author.id].attempts -= 1;
+        }
+    } else {
+
+        if (guess < Playing.inGame[message.author.id].generatedNumber) {
+            let num = message.content;
+            await message.delete();
+            await channel.send(`⬆️ ${num}`);
+            Playing.inGame[message.author.id].attempts -= 1;
+        }
+
+        if (guess > Playing.inGame[message.author.id].generatedNumber) {
+            let num = message.content;
+            await message.delete();
+            await channel.send(`🔻 ${num}`);
+            Playing.inGame[message.author.id].attempts -= 1;
+        }
     }
 
     if (Playing.inGame[message.author.id].attempts == playerEngine.default_tip_attempt) {
@@ -134,7 +150,7 @@ export async function applyGameLogic(message: Message<boolean>, guess: number) {
     if (Playing.inGame[message.author.id].attempts == 0) {
 
         const multiplier = (await getPlayerById(message.author.id)).multiplier;
-        
+
         let message_text = `<@${author.id}> Você já usou suas ${playerEngine.max_attempts} tentativas e o número era ${Playing.inGame[message.author.id].generatedNumber}  :( `;
 
         if (!playerEngine.roleplay) {
