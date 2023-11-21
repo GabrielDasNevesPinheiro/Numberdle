@@ -14,7 +14,7 @@ export default abstract class PlayerScore extends Command {
 
     static async execute(interaction: CommandInteraction<CacheType>) {
 
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: false });
         const user = interaction.options.getUser("user") || interaction.user;
 
         const player = await getPlayerById(user.id);
