@@ -43,7 +43,7 @@ export default abstract class PlayerScore extends Command {
 
         await interaction.editReply({ embeds: [embed] });
 
-
+            //test
     }
 }
 
