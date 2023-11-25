@@ -37,7 +37,7 @@ export default abstract class PlayerScore extends Command {
                 { name: "Total de jogos", value: `${allInfo.gamesPlayed} jogos`, inline: true },
                 { name: "Jogos essa semana", value: `${allInfo.weekGamesPlayed} jogos`, inline: true },
                 { name: "Servidor favorito", value: `${guild}`, inline: true },
-                { name: "Winrate", value: `${allInfo.winrate}%`, inline: false},
+                { name: "Winrate", value: `${allInfo.winrate.toFixed(2)}%`, inline: false},
                 { name: "Buffs mais usados" , value: `${allInfo.mostBuffs.map((buff) => '`'+ `${BuffMarket[buff].name}`+ '`').toString()}`.replace(',', " ").replace(',', " ")}
             ]).setTimestamp(new Date());
 
