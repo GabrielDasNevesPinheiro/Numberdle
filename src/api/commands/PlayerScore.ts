@@ -53,7 +53,7 @@ async function getInfoByUserId(userId: string): Promise<{
     weekGains: number
     weekGamesPlayed: number
     winrate: number
-    mostBuffs: Array<number>
+    mostBuffs: Array<number> 
     maxMultiplier: number
     favGuildId: string
 } | null> {
