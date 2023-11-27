@@ -5,6 +5,7 @@ import { getPlayerById, getPlayers } from "../../database/Controllers/PlayerCont
 import { loadImageURL } from "../../core/utils/ImageUtils";
 import Game from "../../database/Models/Game";
 
+let cooldown = false;
 
 export default abstract class Profile extends Command {
 
@@ -47,7 +48,14 @@ export default abstract class Profile extends Command {
         };
         let image = await getProfileImage(user.displayAvatarURL({ size: 128, extension: "png" }), info);
 
+
+        if(cooldown) {
+            return await interaction.editReply({ content: `Ops, tenta novamente...` });
+        }
         await interaction.editReply({ files: [image] });
+        
+        cooldown = true;
+        setTimeout(() => { cooldown = false}, 5000);
 
     }
 
