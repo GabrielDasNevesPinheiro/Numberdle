@@ -1,3 +1,4 @@
+import { commands } from "../handlers/InteractionHandler";
 import sequelize from "./Connection";
 import Guild from "./Models/Guild";
 
@@ -18,7 +19,7 @@ async function test() {
 
 try {   
     
-    test();
+    console.log(commands);
 
 } catch (error) {
     console.log(`Error while connecting ${error}`);
