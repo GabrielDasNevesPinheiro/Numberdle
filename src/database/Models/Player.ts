@@ -8,6 +8,7 @@ class Player extends Model<InferAttributes<Player>, InferCreationAttributes<Play
     declare score: CreationOptional<number>;
     declare lastPlayed: CreationOptional<Date>;
     declare multiplier: number;
+    declare description: string;
     declare buffs: CreationOptional<Array<number>>;
     declare store: CreationOptional<Array<number>>;
     declare storeDate: CreationOptional<Date>;
@@ -33,6 +34,10 @@ Player.init({
     multiplier: {
         type: DataTypes.FLOAT,
         defaultValue: 1.0
+    },
+    description: {
+        type: new DataTypes.STRING(80),
+        defaultValue: "Descrição não definida"
     },
     buffs: {
         type: DataTypes.JSON(),
