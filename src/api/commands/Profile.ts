@@ -38,7 +38,7 @@ export default abstract class Profile extends Command {
         
         let info: playerInfo = {
             username: player.username,
-            description: "Not implemented yet",
+            description: `${player?.description ?? "Olá, eu amo Numberdle. (/description)"}`,
             multiplier: `${player.multiplier}x`,
             rank: `${rankIndex}°`,
             winrate: `${winrate.toFixed(0)}%`,
@@ -69,7 +69,7 @@ async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buf
 
     const positions = {
         "username": { w: 526, h: 36, x: 8, y: 139 },
-        "description": { w: 526, h: 39, x: 8, y: 220 },
+        "description": { w: 526, h: 40, x: 8, y: 210 },
         "score": { w: 239, h: 42, x: 25, y: 256 },
         "multiplier": { w: 239, h: 42, x: 271, y: 256 },
         "rank": { w: 67, h: 33, x: 46, y: 550 },
@@ -86,8 +86,9 @@ async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buf
     let pos = positions.username;
     drawTextInBox(ctx, info.username, pos.x, pos.y, pos.w, pos.h, 30);
 
-    pos = positions.description;
-    drawTextInBox(ctx, info.description, pos.x, pos.y, pos.w, pos.h, 24);
+    ctx.font = '24px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(info.description, 264, 215)
     
     pos = positions.score;
     drawTextInBox(ctx, info.score, pos.x, pos.y, pos.w, pos.h, 30);
