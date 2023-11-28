@@ -32,7 +32,7 @@ export default abstract class RollStore extends Command {
             return;
         }
 
-        if (player.storeDate && !(player.userId === "446425424680058915")) {
+        if (player.storeDate) {
 
             if (getTimeDiff(player.storeDate) < GameSettings.rollCooldown) {
 
