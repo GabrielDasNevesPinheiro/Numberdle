@@ -38,6 +38,7 @@ export default abstract class Profile extends Command {
         let guild = interaction.client.guilds.cache.get(getMostFrequentElement(guilds));
         
         let info: playerInfo = {
+            userId: player.userId,
             username: player.username,
             description: `${player?.description ?? "Olá, eu amo Numberdle. (/description)"}`,
             multiplier: `${player.multiplier}x`,
@@ -61,6 +62,7 @@ export default abstract class Profile extends Command {
 
 }
 type playerInfo = {
+    userId: string
     username: string,
     description: string,
     score: string,
@@ -70,6 +72,8 @@ type playerInfo = {
     server: string
 }
 async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buffer> {
+
+    let donators = ["340933138039439360", "446425424680058915"];
     
     const canva = new Canvas(542, 642);
     const ctx: CanvasRenderingContext2D = canva.getContext("2d");
@@ -82,7 +86,9 @@ async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buf
         "multiplier": { w: 239, h: 42, x: 271, y: 256 },
         "rank": { w: 67, h: 33, x: 46, y: 550 },
         "winrate": { w: 79, h: 33, x: 231, y: 552 },
-        "server": { w: 162, h: 70, x: 369, y: 565 }
+        "server": { w: 162, h: 70, x: 369, y: 565 },
+        "crown": { w: 60, h: 34, x: 235, y: 0 },
+        "coin": { w: 33, h: 33, x: 477, y: 30 }
     }
 
     let background = await loadImage("./src/assets/profile.png");
@@ -112,7 +118,18 @@ async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buf
     
     pos = positions.server;
     drawTextInBox(ctx, info.server, pos.x, pos.y, pos.w, pos.h, 24);
-    
+
+    if(info.rank === "1°") {
+        pos = positions.crown
+        let crown = await loadImage("./src/assets/crown.png");
+        ctx.drawImage(crown, pos.x, pos.y);
+    }
+
+    if(donators.includes(info.userId)) {
+        pos = positions.coin;
+        let coin = await loadImage("./src/assets/coin.png");
+        ctx.drawImage(coin, pos.x, pos.y);
+    }
 
     return canva.toBuffer();
 
