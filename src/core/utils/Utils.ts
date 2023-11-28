@@ -225,3 +225,23 @@ export async function checkVoted(userId: string): Promise<{ voted: boolean }> {
     res.voted = Boolean(res.voted);
     return res;
 }
+
+export function getMostFrequentElement(arr: string[]): string {
+    const frequencyMap = new Map();
+    arr.forEach((element) => {
+        frequencyMap.set(element, (frequencyMap.get(element) || 0) + 1);
+    });
+    const maxFrequency = Math.max(...frequencyMap.values());
+    return [...frequencyMap.entries()].find(([_, freq]) => freq === maxFrequency)?.[0] || '';
+}
+
+export function getMostFrequentNumbers(arr: number[], count: number): number[] {
+    const frequencyMap = new Map();
+    arr.forEach((num) => {
+        frequencyMap.set(num, (frequencyMap.get(num) || 0) + 1);
+    });
+    return Array.from(frequencyMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, count)
+        .map((entry) => entry[0]);
+}

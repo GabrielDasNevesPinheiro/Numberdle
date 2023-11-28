@@ -3,6 +3,7 @@ import Command from "./Command";
 import { getPlayerById } from "../../database/Controllers/PlayerController";
 import Game from "../../database/Models/Game";
 import { BuffMarket } from "../../core/engine/store/BuffMarket";
+import { getMostFrequentElement, getMostFrequentNumbers } from "../../core/utils/Utils";
 
 export default abstract class PlayerScore extends Command {
 
@@ -26,7 +27,11 @@ export default abstract class PlayerScore extends Command {
             return;
         }
         let allInfo = await getInfoByUserId(user.id);
+        
         let guild = interaction.client.guilds.cache.get(allInfo.favGuildId)?.name || "Não encontrado";
+
+        let usedBuffs = `${allInfo.mostBuffs.map((buff) => '`'+ `${BuffMarket[buff].name}`+ '`').toString()}`.replace(',', " ").replace(',', " ") || "Nenhum"
+
         let embed = new EmbedBuilder().setTitle(`Informações de ${player.username}`)
             .setColor(Colors.Red)
             .setThumbnail(user.displayAvatarURL({ size: 1024 }))
@@ -38,12 +43,12 @@ export default abstract class PlayerScore extends Command {
                 { name: "Jogos essa semana", value: `${allInfo.weekGamesPlayed} jogos`, inline: true },
                 { name: "Servidor favorito", value: `${guild}`, inline: true },
                 { name: "Winrate", value: `${allInfo.winrate.toFixed(2)}%`, inline: false},
-                { name: "Buffs mais usados" , value: `${allInfo.mostBuffs.map((buff) => '`'+ `${BuffMarket[buff].name}`+ '`').toString()}`.replace(',', " ").replace(',', " ")}
+                { name: "Buffs mais usados" , value: usedBuffs }
             ]).setTimestamp(new Date());
 
         await interaction.editReply({ embeds: [embed] });
 
-            //test
+            
     }
 }
 
@@ -110,26 +115,4 @@ async function getInfoByUserId(userId: string): Promise<{
 
         return null
     }
-}
-
-
-function getMostFrequentNumbers(arr: number[], count: number): number[] {
-    const frequencyMap = new Map();
-    arr.forEach((num) => {
-        frequencyMap.set(num, (frequencyMap.get(num) || 0) + 1);
-    });
-    return Array.from(frequencyMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, count)
-        .map((entry) => entry[0]);
-}
-
-
-function getMostFrequentElement(arr: string[]): string {
-    const frequencyMap = new Map();
-    arr.forEach((element) => {
-        frequencyMap.set(element, (frequencyMap.get(element) || 0) + 1);
-    });
-    const maxFrequency = Math.max(...frequencyMap.values());
-    return [...frequencyMap.entries()].find(([_, freq]) => freq === maxFrequency)?.[0] || '';
 }

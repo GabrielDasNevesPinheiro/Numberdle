@@ -4,6 +4,7 @@ import { Canvas, CanvasRenderingContext2D, loadImage } from "canvas";
 import { getPlayerById, getPlayers } from "../../database/Controllers/PlayerController";
 import { loadImageURL } from "../../core/utils/ImageUtils";
 import Game from "../../database/Models/Game";
+import { getMostFrequentElement } from "../../core/utils/Utils";
 
 let cooldown = false;
 
@@ -61,6 +62,7 @@ export default abstract class Profile extends Command {
     }
 
 }
+
 type playerInfo = {
     userId: string
     username: string,
@@ -71,6 +73,7 @@ type playerInfo = {
     rank: string,
     server: string
 }
+
 async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buffer> {
 
     let donators = ["340933138039439360", "446425424680058915", "302419010803335169", "846797955134390282"];
@@ -136,14 +139,7 @@ async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buf
 
 }
 
-function getMostFrequentElement(arr: string[]): string {
-    const frequencyMap = new Map();
-    arr.forEach((element) => {
-        frequencyMap.set(element, (frequencyMap.get(element) || 0) + 1);
-    });
-    const maxFrequency = Math.max(...frequencyMap.values());
-    return [...frequencyMap.entries()].find(([_, freq]) => freq === maxFrequency)?.[0] || '';
-}
+
 
 function drawTextInBox(
     ctx: CanvasRenderingContext2D,

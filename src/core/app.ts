@@ -1,4 +1,4 @@
-import { ActivityType, ChannelType, Client, GatewayIntentBits, Partials } from "discord.js";
+import { ActivityType, ChannelType, Client, GatewayIntentBits, Partials, Guild as DiscordGuild } from "discord.js";
 import { config } from "dotenv";
 import executeAction from "../handlers/InteractionHandler";
 import sequelize from "../database/Connection";
@@ -12,6 +12,45 @@ import { AutoPoster } from "topgg-autoposter";
 config();
 const environment = process.env.ENVIRONMENT || "prod";
 
+const startDatabase = async () => {
+    await sequelize.authenticate();
+    await sequelize.sync();
+}
+
+const setupActivity = async (client: Client) => {
+    client.user.setActivity({
+        name: "Ganhe pontos votando",
+        state: "",
+        type: ActivityType.Custom,
+        url: 'https://discord.ly/numberdle'
+    });
+}
+
+const startVoteChecker = async () => {
+    setTimeout(async () => {
+        let players = await getPlayers();
+        players.forEach(async (player) => {
+            let { voted } = await checkVoted(player.userId);
+            if (voted) player.score += 300;
+            await player.save();
+        });
+    }, 120000);
+}
+
+const setupTopgg = async(client: Client) => {
+    if (environment === "prod") {
+        AutoPoster(process.env.TOPGG, client);
+        await startVoteChecker();
+    }
+}
+
+const showGuilds = (guild: DiscordGuild) => console.log(`I'm on the guild => ${guild?.name ?? "Not found"}`);
+
+const configNewGuild = async (guild: DiscordGuild) => {
+    const mainTextChannel = (await guild.channels.fetch()).filter((channel) => channel.type == ChannelType.GuildText).first();
+    await createGuild(mainTextChannel.id, guild.id);
+}
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -23,31 +62,12 @@ const client = new Client({
 });
 
 client.on('ready', async (client) => {
-    await sequelize.authenticate();
-    await sequelize.sync();
 
-    client.user.setActivity({
-        name: "Ganhe pontos votando",
-        state: "",
-        type: ActivityType.Custom,
-        url: 'https://discord.ly/numberdle'
-    });
+    await startDatabase();
+    await setupActivity(client);
+    await setupTopgg(client);
 
-    if(environment === "prod") {
-        AutoPoster(process.env.TOPGG, client);
-
-        setTimeout(async() => {
-            let players = await getPlayers();
-            players.forEach(async(player) => {
-                let { voted } = await checkVoted(player.userId);
-                if (voted) player.score += 300;
-                await player.save();
-            });
-        }, 120000);
-
-    }
-
-    client.guilds.cache.forEach((guild) => console.log(`I'm on the guild => ${guild?.name ?? "Not found"}`));
+    client.guilds.cache.forEach(showGuilds);
 
     console.log(`Running... ${client.user?.tag}`);
 
@@ -55,8 +75,7 @@ client.on('ready', async (client) => {
 
 client.on('guildCreate', async (guild) => {
 
-    const mainTextChannel = (await guild.channels.fetch()).filter((channel) => channel.type == ChannelType.GuildText).first();
-    await createGuild(mainTextChannel.id, guild.id);
+    await configNewGuild(guild);
     client.users.send(guild.ownerId, "Obrigado por me adicionar em seu servidor, para me configurar basta definir um canal padrão para mim utilizando /setchannel em seu servidor! :)");
 
 });
