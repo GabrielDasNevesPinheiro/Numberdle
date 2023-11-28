@@ -26,7 +26,7 @@ export default abstract class Profile extends Command {
 
         let player = await getPlayerById(user.id);
 
-        if (!player) await interaction.editReply({ content: `Este usuário não jogou Numberdle :()` });
+        if (!player) return await interaction.editReply({ content: `Este usuário não jogou Numberdle :()` });
         
         let rankIndex = (await getPlayers()).reduce((prev, curr, index) => curr.userId === user.id ? index + 1 : prev, 0);
 
