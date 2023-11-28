@@ -73,7 +73,7 @@ type playerInfo = {
 }
 async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buffer> {
 
-    let donators = ["340933138039439360", "446425424680058915"];
+    let donators = ["340933138039439360", "446425424680058915", "302419010803335169", "846797955134390282"];
     
     const canva = new Canvas(542, 642);
     const ctx: CanvasRenderingContext2D = canva.getContext("2d");
