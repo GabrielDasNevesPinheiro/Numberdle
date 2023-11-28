@@ -82,7 +82,7 @@ async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buf
         "multiplier": { w: 239, h: 42, x: 271, y: 256 },
         "rank": { w: 67, h: 33, x: 46, y: 550 },
         "winrate": { w: 79, h: 33, x: 231, y: 552 },
-        "server": { w: 162, h: 70, x: 369, y: 550 }
+        "server": { w: 162, h: 70, x: 369, y: 565 }
     }
 
     let background = await loadImage("./src/assets/profile.png");
