@@ -47,6 +47,7 @@ client.on('ready', async (client) => {
 
     }
 
+    client.guilds.cache.forEach((guild) => console.log(`I'm on the guild => ${guild?.name ?? "Not found"}`));
 
     console.log(`Running... ${client.user?.tag}`);
 
