@@ -97,14 +97,15 @@ async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buf
 
     ctx.fillStyle = "#FFF";
 
-    let pos = positions.username;
-    drawTextInBox(ctx, info.username, pos.x, pos.y, pos.w, pos.h, 30);
+    ctx.font = '30px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(info.username, 264, 164)
 
     ctx.font = '24px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(info.description, 264, 215)
     
-    pos = positions.score;
+    let pos = positions.score;
     drawTextInBox(ctx, info.score, pos.x, pos.y, pos.w, pos.h, 30);
     
     pos = positions.multiplier;
