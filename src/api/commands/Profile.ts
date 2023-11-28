@@ -99,11 +99,11 @@ async function getProfileImage(avatarURL: string, info: playerInfo): Promise<Buf
 
     ctx.font = '30px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(info.username, 264, 164)
+    ctx.fillText(info.username, 264, 164);
 
     ctx.font = '24px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(info.description, 264, 215)
+    ctx.fillText(info.description, 264, 215);
     
     let pos = positions.score;
     drawTextInBox(ctx, info.score, pos.x, pos.y, pos.w, pos.h, 30);
