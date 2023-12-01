@@ -5,7 +5,7 @@ import sequelize from "../database/Connection";
 import { applyGameLogic, checkVoted, isValidMessage } from "./utils/Utils";
 import postSlashCommands from "../api/Register";
 import { createGuild, getGuildById } from "../database/Controllers/GuildController";
-import { getPlayers } from "../database/Controllers/PlayerController";
+import { getPlayerById, getPlayers } from "../database/Controllers/PlayerController";
 import Guild from "../database/Models/Guild";
 import { AutoPoster } from "topgg-autoposter";
 
@@ -27,24 +27,28 @@ const setupActivity = async (client: Client) => {
     });
 }
 
-const startVoteChecker = async () => {
-    setInterval(async () => {
-        let players = await getPlayers();
-        players.forEach(async (player) => {
-            let { voted } = await checkVoted(player.userId);
+const assignVoted = async (userId: string) => {
 
-            if(!voted && votedPlayersChecked[player.userId]) delete votedPlayersChecked[player.userId];
-            if (voted && !votedPlayersChecked[player.userId]) player.score += 300;
-            await player.save();
-            votedPlayersChecked[player.userId] = true;
-        });
-    }, 120000);
-}
+    let { voted } = await checkVoted(userId);
 
-const setupTopgg = async(client: Client) => {
+    if (!voted && votedPlayersChecked[userId]) delete votedPlayersChecked[userId];
+    if (voted && !votedPlayersChecked[userId]) {
+
+        let player = await getPlayerById(userId);
+
+        if (!player) return;
+
+        player.score += 300;
+        await player.save();
+
+    }
+
+    votedPlayersChecked[userId] = true;
+};
+
+const setupTopgg = async (client: Client) => {
     if (environment === "prod") {
         AutoPoster(process.env.TOPGG, client);
-        await startVoteChecker();
     }
 }
 
@@ -106,6 +110,12 @@ client.on('interactionCreate', async (interaction) => {
         await interaction.reply("?");
         return;
     }
+
+    try {
+
+        assignVoted(interaction.user.id);
+
+    } catch {}
 
     executeAction(interaction.commandName, interaction);
 
