@@ -11,6 +11,7 @@ import { AutoPoster } from "topgg-autoposter";
 
 config();
 const environment = process.env.ENVIRONMENT || "prod";
+let votedPlayersChecked: { [key: string]: boolean } = {};
 
 const startDatabase = async () => {
     await sequelize.authenticate();
@@ -27,12 +28,15 @@ const setupActivity = async (client: Client) => {
 }
 
 const startVoteChecker = async () => {
-    setTimeout(async () => {
+    setInterval(async () => {
         let players = await getPlayers();
         players.forEach(async (player) => {
             let { voted } = await checkVoted(player.userId);
-            if (voted) player.score += 300;
+
+            if(!voted && votedPlayersChecked[player.userId]) delete votedPlayersChecked[player.userId];
+            if (voted && !votedPlayersChecked[player.userId]) player.score += 300;
             await player.save();
+            votedPlayersChecked[player.userId] = true;
         });
     }, 120000);
 }
