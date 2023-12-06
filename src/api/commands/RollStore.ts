@@ -3,7 +3,7 @@ import Command from "./Command";
 import { getPlayerById } from "../../database/Controllers/PlayerController";
 import { getBuffMarket } from "../../core/engine/store/MarketGenerator";
 import { BuffMarket } from "../../core/engine/store/BuffMarket";
-import { getTimeDiff, getTodayDate } from "../../core/utils/Utils";
+import { checkVoted, getTimeDiff, getTodayDate } from "../../core/utils/Utils";
 import { rarities } from "../../core/engine/enum/Rarity";
 import { Playing } from "../../core/engine/Playing";
 import { attributeNames } from "../../core/engine/enum/Attributes";
@@ -19,6 +19,10 @@ export default abstract class RollStore extends Command {
 
         await interaction.deferReply({ ephemeral: true });
         await interaction.editReply({ content: "Invocando anciões..." });
+
+        let { voted } = await checkVoted(interaction.user.id);
+
+        if(!voted) return await interaction.editReply({ content: "Use `/vote` e vote para poder rolar sua lojinha!" });
 
         if(Playing.inGame[interaction.user.id]) {
             await interaction.editReply({ content: "Você não pode fazer isso em jogo." });
