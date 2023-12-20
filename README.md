@@ -1,4 +1,4 @@
-# Numberdle 6️⃣9️⃣
+# Numberdle 6
 ### Um jogo diário de números super divertido! 😄
 ### Use `/gamerules` para aprender a jogar 🤓☝️
 [Adicionar Bot](https://discord.com/oauth2/authorize?client_id=1158185774823506020&permissions=2147485696&scope=bot%20applications.commands)
